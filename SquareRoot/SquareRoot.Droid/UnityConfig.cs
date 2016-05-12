@@ -1,8 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
-using SquareRoot.iOS.Reader;
 using CardReader.Interfaces;
 
-namespace SquareRoot.iOS
+namespace SquareRoot.Droid
 {
 	public static class UnityConfig
 	{
@@ -14,9 +13,7 @@ namespace SquareRoot.iOS
 
 		private static void RegisterTypes(IUnityContainer container)
 		{
-			container.RegisterType<IPlatformService, PlatformServiceiOS>(new ContainerControlledLifetimeManager());
 			container.RegisterType<ISecurityManager, SecurityManager>(new ContainerControlledLifetimeManager());
-
 			container.RegisterType<ICardReaderHelper, UnimagCardReaderHelper>(new ContainerControlledLifetimeManager());
 		}
 	}

@@ -16,6 +16,8 @@ namespace SquareRoot.Droid
         {
             base.OnCreate(bundle);
 
+            UnityConfig.Initialize();
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
         }
