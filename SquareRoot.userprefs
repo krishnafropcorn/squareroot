@@ -1,14 +1,49 @@
-﻿<Properties StartupItem="SquareRoot\SquareRoot\SquareRoot.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CardReader\Utils\StringUtils.cs">
+﻿<Properties StartupItem="SquareRoot\SquareRoot.Droid\SquareRoot.Droid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 4 (Lollipop)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="SquareRoot\SquareRoot\Screens\SwipeCard.xaml">
     <Files>
-      <File FileName="CardReader\CardReaderMagStripeReader.cs" Line="21" Column="50" />
-      <File FileName="CardReader\CardReaderNfcReaderWriter.cs" Line="33" Column="4" />
-      <File FileName="PaymentService.PCL\CardDetails.cs" Line="74" Column="19" />
-      <File FileName="PaymentService.PCL\PaymentExceptionInfo.cs" Line="26" Column="19" />
-      <File FileName="PaymentService.PCL\StripeGateway\StripePaymentService.cs" Line="3" Column="14" />
+      <File FileName="PaymentService.PCL\PaymentExceptionInfo.cs" Line="1" Column="1" />
+      <File FileName="PaymentService.PCL\StripeGateway\StripePaymentService.cs" Line="38" Column="24" />
       <File FileName="CardReader\Utils\StringUtils.cs" Line="2" Column="19" />
+      <File FileName="Common\CardDetails.cs" Line="60" Column="12" />
+      <File FileName="Common\CreditCardProvider.cs" Line="3" Column="35" />
+      <File FileName="PaymentService.PCL\IPaymentService.cs" Line="8" Column="165" />
+      <File FileName="CardReader\Interfaces\ICardReaderHelper.cs" Line="8" Column="1" />
+      <File FileName="CardReader\Interfaces\IHeadsetVolumeHelper.cs" Line="1" Column="1" />
+      <File FileName="SquareRoot\SquareRoot\Screens\SwipePage.xaml.cs" Line="26" Column="15" />
+      <File FileName="SquareRoot\SquareRoot\Screens\SwipeCard.xaml.cs" Line="1" Column="1" />
+      <File FileName="SquareRoot\SquareRoot\Screens\CardDetails.xaml.cs" Line="1" Column="1" />
+      <File FileName="SquareRoot\SquareRoot\UnityProvider.cs" Line="1" Column="1" />
+      <File FileName="SquareRoot\SquareRoot\Screens\SwipeCard.xaml" Line="11" Column="24" />
+      <File FileName="SquareRoot\SquareRoot\App.cs" Line="22" Column="4" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SquareRoot" expanded="True">
+            <Node name="Common" expanded="True">
+              <Node name="PaymentService.PCL" expanded="True" />
+              <Node name="SquareRoot" expanded="True">
+                <Node name="Screens" expanded="True">
+                  <Node name="SwipePage.xaml" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+            <Node name="Droid" expanded="True">
+              <Node name="SquareRoot.Droid" expanded="True" />
+            </Node>
+            <Node name="iOS" expanded="True">
+              <Node name="SquareRoot.iOS" expanded="True">
+                <Node name="Reader" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
