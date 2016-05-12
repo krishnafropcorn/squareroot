@@ -13,7 +13,8 @@ namespace SquareRoot
         {
 			Current = this;
             // The root page of your application
-			MainPage = new SwipePage();
+//			MainPage = new SwipePage();
+            MainPage = new NavigationPage (new UniMag ());
         }
 
 		public static new App Current

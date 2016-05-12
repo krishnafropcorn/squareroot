@@ -45,6 +45,15 @@
     <Compile Include="Interfaces\ISecurityManager.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="UnityProvider.cs" />
+    <Compile Include="Screens\CardDetails.xaml.cs">
+      <DependentUpon>CardDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\SwipeCard.xaml.cs">
+      <DependentUpon>SwipeCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\UniMag.xaml.cs">
+      <DependentUpon>UniMag.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -118,6 +127,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Screens\SwipePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\CardDetails.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\SwipeCard.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\UniMag.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
