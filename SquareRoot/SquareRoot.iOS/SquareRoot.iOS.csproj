@@ -120,21 +120,17 @@
       <Project>{90A344C3-9723-40E3-AFED-C644DA4EB2EE}</Project>
       <Name>ACR3x.sdk.iOSBindings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Desktop\squareroot\CardReader\CardReader.csproj">
+    <ProjectReference Include="..\..\CardReader\CardReader.csproj">
       <Project>{BA558549-0973-4AFC-9463-99EEFFB268B2}</Project>
       <Name>CardReader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Desktop\squareroot\SquareRoot\SquareRoot\SquareRoot.csproj">
+    <ProjectReference Include="..\SquareRoot\SquareRoot.csproj">
       <Project>{F6789549-CEA0-4174-89A1-A878B8720CF6}</Project>
       <Name>SquareRoot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Desktop\squareroot\PaymentService.PCL\PaymentService.PCL.csproj">
+    <ProjectReference Include="..\..\PaymentService.PCL\PaymentService.PCL.csproj">
       <Project>{0813203C-A1C1-497A-BC95-7A7177D09231}</Project>
       <Name>PaymentService.PCL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Desktop\IDTech\UniMag.Sdk.Bindings.iOS.Demo\UniMag.Sdk.Bindings.iOS\UniMag.Sdk.Bindings.iOS.csproj">
-      <Project>{C495963F-1F05-4003-BF09-6E5CB7D7B955}</Project>
-      <Name>UniMag.Sdk.Bindings.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
