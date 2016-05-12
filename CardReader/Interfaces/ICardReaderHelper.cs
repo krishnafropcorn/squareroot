@@ -1,21 +1,16 @@
 ﻿using System.Threading.Tasks;
+using Payment;
 
 namespace CardReader.Interfaces
 {
     public interface ICardReaderHelper
     {
-        IHeadsetVolumeHelper VolumeHelper { get; }
-
-        IReaderConnectionListener ConnectionListener { get; }
-
         bool IsReaderPlugged { get; }
 
-        Task PowerOn();
+		CardDetails CreditCardDetails { get; }
 
-        void PowerOff();
+		void StartListening();
 
-        Task<MagStripeResultBase> ReadMagStripeAsync(byte[] key);
-
-        Task<string> ReadUuidAsync(bool keepLoopActive = false);
+		void StopListening();
     }
 }

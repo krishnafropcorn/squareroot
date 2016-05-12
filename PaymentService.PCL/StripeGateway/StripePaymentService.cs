@@ -26,16 +26,16 @@ namespace Payment.StripeGateway
 
                 CardDetails toReturn = new CardDetails()
                 {
-                    CardBrand = cardToken.StripeCard.Brand,
+                    // CardBrand = cardToken.StripeCard.Brand,
 					CardExpiryMonth = System.Int32.Parse(cardToken.StripeCard.ExpirationMonth),
 					CardExpiryYear = System.Int32.Parse(cardToken.StripeCard.ExpirationYear),
                     CardFirstName = firstName,
                     CardLastName = lastName,
                     CardRawNameCaptured = cardRawNameCaptured,
-                    ProviderCardFingerprint = "TEST_FINGERPRINT",
-                    ProviderCardId = cardToken.StripeCard.AccountId,
-                    ProviderToken = cardToken.Id,
-                    CardLast4 = cardToken.StripeCard.Last4
+                    // ProviderCardFingerprint = "TEST_FINGERPRINT",
+                    // ProviderCardId = cardToken.StripeCard.AccountId,
+                    // ProviderToken = cardToken.Id,
+                    // CardLast4 = cardToken.StripeCard.Last4
                 };
 
                 taskCompletionSource.SetResult(toReturn);

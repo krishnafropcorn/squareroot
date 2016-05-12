@@ -39,8 +39,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardDetails.cs" />
-    <Compile Include="CreditCardProvider.cs" />
     <Compile Include="IPaymentService.cs" />
     <Compile Include="PaymentExceptionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,4 +76,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{75482CF6-53D4-4A3D-9986-4965508987C7}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
