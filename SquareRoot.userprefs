@@ -1,4 +1,4 @@
-﻿<Properties StartupItem="SquareRoot\SquareRoot.Droid\SquareRoot.Droid.csproj">
+﻿<Properties StartupItem="SquareRoot\SquareRoot.Droid\SquareRoot.Droid.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 4 (Lollipop)" />
   <MonoDevelop.Ide.Workbench ActiveDocument="SquareRoot\SquareRoot\Screens\SwipeCard.xaml">
     <Files>

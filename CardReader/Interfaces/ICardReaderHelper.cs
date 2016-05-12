@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Payment;
+using System;
 
 namespace CardReader.Interfaces
 {
@@ -9,7 +10,7 @@ namespace CardReader.Interfaces
 
 		CardDetails CreditCardDetails { get; }
 
-		void StartListening();
+		void StartListening(Action OnCreditCardSwiped);
 
 		void StopListening();
     }
