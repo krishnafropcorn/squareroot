@@ -70,8 +70,8 @@
 
         public override string ToString()
         {
-            return
-                $"[CardDetails: ProviderToken={ProviderToken}, ProviderCardFingerprint={ProviderCardFingerprint}, ProviderCardId={ProviderCardId}, CardBrand={CardBrand}, CardExpiryMonth={CardExpiryMonth}, CardExpiryYear={CardExpiryYear}, CardFirstName={CardFirstName}, CardLastName={CardLastName}, CardRawNameCaptured={CardRawNameCaptured}]";
+			return "";
+                //$"[CardDetails: ProviderToken={ProviderToken}, ProviderCardFingerprint={ProviderCardFingerprint}, ProviderCardId={ProviderCardId}, CardBrand={CardBrand}, CardExpiryMonth={CardExpiryMonth}, CardExpiryYear={CardExpiryYear}, CardFirstName={CardFirstName}, CardLastName={CardLastName}, CardRawNameCaptured={CardRawNameCaptured}]";
         }
     }
 }

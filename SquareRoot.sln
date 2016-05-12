@@ -17,11 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareRoot.Droid", "SquareR
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iOS", "iOS", "{653F7CC5-A528-4105-9F69-26788249669C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACR3x.sdk.iOSBindings", "..\..\Downloads\Archive\ACR3x.sdk.iOSBindings\ACR3x.sdk.iOSBindings.csproj", "{90A344C3-9723-40E3-AFED-C644DA4EB2EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACR3x.sdk.iOSBindings", "ACR3x.sdk.iOSBindings\ACR3x.sdk.iOSBindings.csproj", "{90A344C3-9723-40E3-AFED-C644DA4EB2EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareRoot.iOS", "..\..\Downloads\Archive\SquareRoot\SquareRoot.iOS\SquareRoot.iOS.csproj", "{52E997A5-9B6F-4010-AABB-233A8BF998EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareRoot.iOS", "SquareRoot\SquareRoot.iOS\SquareRoot.iOS.csproj", "{52E997A5-9B6F-4010-AABB-233A8BF998EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMag.Sdk.Bindings.iOS", "..\IDTech\UniMag.Sdk.Bindings.iOS.Demo\UniMag.Sdk.Bindings.iOS\UniMag.Sdk.Bindings.iOS.csproj", "{C495963F-1F05-4003-BF09-6E5CB7D7B955}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMag.Sdk.Bindings.iOS", "UniMag.Sdk.Bindings.iOS.Demo\UniMag.Sdk.Bindings.iOS\UniMag.Sdk.Bindings.iOS.csproj", "{C495963F-1F05-4003-BF09-6E5CB7D7B955}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -22,8 +22,8 @@
 
         public override string ToString()
         {
-            return
-                $"[PaymentExceptionInfo: ErrorCode={ErrorCode}, ErrorParam={ErrorParam}, ErrorType={ErrorType}]";
+			return "";
+                //$"[PaymentExceptionInfo: ErrorCode={ErrorCode}, ErrorParam={ErrorParam}, ErrorType={ErrorType}]";
         }
     }
 }

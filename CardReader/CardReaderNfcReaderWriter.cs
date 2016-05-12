@@ -18,11 +18,19 @@ namespace CardReader
 			this.ConnectionListener = plugListener;
         }
 
-		public IReaderConnectionListener ConnectionListener { get; }
+		public IReaderConnectionListener ConnectionListener { get; private set;}
 
-		public bool IsReaderConnected => _cardReaderHelper.IsReaderPlugged;
+		public bool IsReaderConnected {
+			get {
+				return _cardReaderHelper.IsReaderPlugged; 
+			}
+		}
 
-	    public bool IsReadingUuiDs => _readingUuids;
+		public bool IsReadingUuiDs {
+			get { 
+				return _readingUuids;
+			}
+		}
 
 	    public async Task<string> ReadUuidAsync()
         {
@@ -54,7 +62,7 @@ namespace CardReader
 	            }
 	            catch (Exception ex)
 	            {
-	                await callback(result, ex);
+	                callback(result, ex);
 	            }
 	        }
 	    }

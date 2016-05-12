@@ -15,9 +15,11 @@ namespace CardReader
 			this.ConnectionListener = plugListener;
         }
 
-		public IReaderConnectionListener ConnectionListener { get; }
+		public IReaderConnectionListener ConnectionListener { get; private set; }
 
-		public bool IsReaderConnected => _cardReaderHelper.IsReaderPlugged;
+		public bool IsReaderConnected {
+			get{ return _cardReaderHelper.IsReaderPlugged;}
+		}
 
 	    public async Task<MagStripeResultBase> ReadMagStripeAsync(byte[] key)
         {

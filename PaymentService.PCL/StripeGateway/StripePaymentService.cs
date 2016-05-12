@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Stripe;
-using static System.Int32;
 
 namespace Payment.StripeGateway
 {
@@ -28,8 +27,8 @@ namespace Payment.StripeGateway
                 CardDetails toReturn = new CardDetails()
                 {
                     CardBrand = cardToken.StripeCard.Brand,
-                    CardExpiryMonth = Parse(cardToken.StripeCard.ExpirationMonth),
-                    CardExpiryYear = Parse(cardToken.StripeCard.ExpirationYear),
+					CardExpiryMonth = System.Int32.Parse(cardToken.StripeCard.ExpirationMonth),
+					CardExpiryYear = System.Int32.Parse(cardToken.StripeCard.ExpirationYear),
                     CardFirstName = firstName,
                     CardLastName = lastName,
                     CardRawNameCaptured = cardRawNameCaptured,
