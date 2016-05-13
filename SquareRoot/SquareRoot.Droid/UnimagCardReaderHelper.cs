@@ -7,7 +7,7 @@ using Java.Lang;
 using Java.Util.Regex;
 using Android.OS;
 using System;
-using Payment;
+using Common;
 
 
 namespace SquareRoot.Droid
