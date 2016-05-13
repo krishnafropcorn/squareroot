@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using CardReader.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.Practices.Unity;
 
 namespace SquareRoot
 {
@@ -11,23 +12,23 @@ namespace SquareRoot
     {
 		private ICardReaderHelper _cardReaderHelper;
 
-		public SwipeCard(ICardReaderHelper cardReaderHelper)
+		public SwipeCard()
         {
             InitializeComponent();
 
-			_cardReaderHelper = cardReaderHelper;
+			_cardReaderHelper = UnityProvider.Container.Resolve<ICardReaderHelper>();
         }
 
 		protected override void OnAppearing ()
 		{
 			base.OnAppearing ();
 
-			_cardReaderHelper.StartListening (() => {
+			_cardReaderHelper.StartListening ((string cardDetails) => {
 				Device.BeginInvokeOnMainThread (async () => {
 					if (_cardReaderHelper.CreditCardDetails == null)
 						await DisplayAlert ("Invalid Swipe", "Please swipe again", "OK`");
 					else
-						ShowPaymentScreen ();
+						await DisplayAlert ("Valid Swipe", "Card Details: " + cardDetails, "OK`");
 				});
 			});
 

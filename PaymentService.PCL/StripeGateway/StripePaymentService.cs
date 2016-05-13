@@ -11,7 +11,7 @@ namespace Payment
 
 		public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int charge)
 		{
-			Initialize():
+			Initialize ();
 
 			var myCharge = new StripeChargeCreateOptions();
 
@@ -52,7 +52,7 @@ namespace Payment
 
 		public Task<CardToken> TokenizeCard(CardDetails cardDeatils)
 		{
-			Initialize():
+			Initialize ();
 
             StripeCreditCardOptions option = new StripeCreditCardOptions
             {
