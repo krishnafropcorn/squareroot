@@ -1,15 +1,44 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="SquareRoot.SwipeCard"
-			Title="Reader Demo" BackgroundColor="White">
-	    <Label 
-        Font="Large"
-        FontAttributes="None"
-        LineBreakMode="TailTruncation"
-        Text="Swipe Card Now"
-        TextColor="Black"
-        FontSize="20" 
-        x:Name="UserInstructionLabel"
-        XAlign="Center"
-        YAlign="Center"
-    />
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:local="clr-namespace:SquareRoot;assembly=SquareRoot"
+			 x:Class="SquareRoot.SwipeCard"
+			 xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+			 Title="Reader Demo" BackgroundColor="White">
+			<StackLayout VerticalOptions="Center" >
+				<Label  Font="Large"
+					FontAttributes="None"
+					IsVisible="false"
+        			LineBreakMode="TailTruncation"
+        			Text="Swipe Card Now"
+        			TextColor="Black"
+        			FontSize="20" 
+        			x:Name="UserInstructionLabel"
+        			XAlign="Center"
+        			YAlign="Center" />
+
+	        	<StackLayout Orientation="Vertical" x:Name="ChargeCreditCardForm" BackgroundColor="White">
+	        		<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+	        			<Label Text="CVV"
+	        				   TextColor="Black"
+	        				   VerticalOptions="Center"
+	        				   HorizontalOptions="Center"/>
+	        			<local:MyEntry Placeholder="cvv text"
+                            WidthRequest="100"
+                            TextColor="Black"
+                            HorizontalOptions="CenterAndExpand" />
+	        		</StackLayout>
+	        		<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+	        			<Label Text="Cost"
+	        				   TextColor="Black"
+	        				   VerticalOptions="Center"
+	        				   HorizontalOptions="Center"/>
+	        			<local:MyEntry Placeholder="cvv text"
+                            WidthRequest="100"
+                            TextColor="Black"
+                            HorizontalOptions="CenterAndExpand" />
+	        		</StackLayout>
+	        		<Button Text="Charge" HorizontalOptions="Center" Clicked="OnChargeButtonClicked" />
+	        	</StackLayout>
+			</StackLayout>
 </ContentPage>

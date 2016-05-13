@@ -5,6 +5,9 @@ using Xamarin.Forms;
 using CardReader.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
+//using Payment;
+using Common;
+
 
 namespace SquareRoot
 {
@@ -23,16 +26,19 @@ namespace SquareRoot
 		{
 			base.OnAppearing ();
 
-			_cardReaderHelper.StartListening ((string cardDetails) => {
+			/*_cardReaderHelper.StartListening ((string cardDetails) => {
 				Device.BeginInvokeOnMainThread (async () => {
 					if (_cardReaderHelper.CreditCardDetails == null)
 						await DisplayAlert ("Invalid Swipe", "Please swipe again", "OK`");
-					else
+					else {
 						await DisplayAlert ("Valid Swipe", "Card Details: " + cardDetails, "OK`");
+						ShowPaymentScreen();
+					}
 				});
-			});
+			});*/
 
-			ShowReaderAvailableUi ();
+
+			ShowPaymentScreen ();
 		}
 
 		private async Task ShowReaderAvailableUi ()
@@ -54,7 +60,16 @@ namespace SquareRoot
 		void ShowPaymentScreen ()
 		{
 			UserInstructionLabel.IsVisible = false;
+			ChargeCreditCardForm.IsVisible = true;
+		}
 
+		void OnChargeButtonClicked(object sender, EventArgs args)
+		{
+			//Button chargeButton = (Button)sender;
+			//var cardDetails = new CardDetails ();
+			//cardDetails.CardExpiryMonth = 3;
+
+			//UnityProvider.Container.Resolve<IPaymentService> ().ChargeCard(
 
 		}
     }
