@@ -7,8 +7,12 @@ namespace Payment
 {
     public class StripePaymentService: IPaymentService
     {
+		bool _initialize;
+
 		public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int charge)
 		{
+			Initialize():
+
 			var myCharge = new StripeChargeCreateOptions();
 
 			// always set these properties
@@ -47,7 +51,9 @@ namespace Payment
 		}
 
 		public Task<CardToken> TokenizeCard(CardDetails cardDeatils)
-        {
+		{
+			Initialize():
+
             StripeCreditCardOptions option = new StripeCreditCardOptions
             {
 				Number = cardDeatils.CreditCardNumber,
@@ -98,5 +104,12 @@ namespace Payment
 
             return null;
         }
+
+		private void Initialize() {
+			if (!_initialize) {
+				StripeConfiguration.SetApiKey ("sk_aMWXkRf9GikydNO5xEm0q8sih9g4Q");
+				_initialize = true;
+			}
+		}
     }
 }
