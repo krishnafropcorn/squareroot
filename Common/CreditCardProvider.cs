@@ -1,4 +1,4 @@
-﻿namespace Payment
+﻿namespace Common
 {
     public enum CreditCardProvider
     {

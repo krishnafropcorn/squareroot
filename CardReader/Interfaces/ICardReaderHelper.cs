@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Payment;
 using System;
+using Common;
 
 namespace CardReader.Interfaces
 {

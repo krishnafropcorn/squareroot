@@ -1,31 +1,7 @@
-﻿namespace Payment
+﻿namespace Common
 {
     public class CardDetails
     {
-//        public string ProviderToken
-//        {
-//            get;
-//            set;
-//        }
-//
-//        public string ProviderCardFingerprint
-//        {
-//            get;
-//            set;
-//        }
-
-//        public string ProviderCardId
-//        {
-//            get;
-//            set;
-//        }
-//
-//        public string CardBrand
-//        {
-//            get;
-//            set;
-//        }
-
         public int CardExpiryMonth
         {
             get;
@@ -56,13 +32,12 @@
             set;
         }
 
-//        public string CardLast4
-//        {
-//            get;
-//            set;
-//        }
-
 		public string CreditCardNumber {
+			get;
+			set;
+		}
+
+		public string CVV {
 			get;
 			set;
 		}
@@ -72,4 +47,54 @@
 			set;
 		}
     }
+
+	public class CardToken {
+
+		public string ProviderTokenId
+        {
+            get;
+            set;
+        }
+
+        public string ProviderCardFingerprint
+        {
+            get;
+            set;
+        }
+
+        public string ProviderCardId
+        {
+            get;
+            set;
+        }
+
+        public string CardBrand
+        {
+            get;
+            set;
+        }
+
+        public string CardLast4
+        {
+            get;
+            set;
+        }
+	}
+
+	public class ChargeCardResponse {
+		public bool IsSuccessFull {
+			get;
+			set;
+		}
+
+		public string FailureMessage {
+			get;
+			set;
+		}
+
+		public string FailureCode {
+			get;
+			set;
+		}
+	}
 }

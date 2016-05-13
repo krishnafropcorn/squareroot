@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 using CardReader.Interfaces;
+using Payment;
 
 namespace SquareRoot.Droid
 {
@@ -15,6 +16,7 @@ namespace SquareRoot.Droid
 		{
 			container.RegisterType<ISecurityManager, SecurityManager>(new ContainerControlledLifetimeManager());
 			container.RegisterType<ICardReaderHelper, UnimagCardReaderHelper>(new ContainerControlledLifetimeManager());
+			container.RegisterType<IPaymentService, StripePaymentService>(new ContainerControlledLifetimeManager());
 		}
 	}
 }

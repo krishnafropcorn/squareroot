@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Common;
 
 namespace Payment
 {
     public interface IPaymentService
     {
-        Task<CardDetails> TokenizeCard(string cardNumber, int expiryMonth, int expiryYear, string cvv, string firstName, string lastName, string cardRawNameCaptured);
+		Task<ChargeCardResponse> ChargeCard (CardDetails cardDeatils, int charge);
+
+		Task<CardToken> TokenizeCard (CardDetails cardDeatils);
 
         CreditCardProvider GetCreditCardProvider(string cardNumber);
 
