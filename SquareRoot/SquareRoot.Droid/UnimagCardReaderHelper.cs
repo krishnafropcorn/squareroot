@@ -6,6 +6,8 @@ using IDTech.MSR.XMLManager;
 using Java.Lang;
 using Java.Util.Regex;
 using Android.OS;
+using System;
+using Payment;
 
 
 namespace SquareRoot.Droid
@@ -18,14 +20,17 @@ namespace SquareRoot.Droid
         
 		public CardDetails CreditCardDetails { get; private set; }
 
-		public void StartListening(Android.Content.Context Context)
+		Action<string> OnCreditCardSwiped;
+
+		public void StartListening(Action OnCreditCardSwiped)
         {
             IsReaderPlugged = false;
             CreditCardDetails = null;
-			UniMagReader = new UniMagReader (this, Context);
+			UniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext());
 			UniMagReader.SetSaveLogEnable(false);
 			UniMagReader.SetXMLFileNameWithPath(null);
 			UniMagReader.LoadingConfigurationXMLFile(true);
+			this.OnCreditCardSwiped = OnCreditCardSwiped;
 			//myUniMagReader.setVerboseLoggingEnable(true);
 			UniMagReader.RegisterListen();
             // ToDo: Attach to listeners
@@ -52,35 +57,38 @@ namespace SquareRoot.Droid
 			Log.Debug("UniMag", "OnReceiveMsgAutoConfigProgress");
 		}
 
-		public void OnReceiveMsgCardData(byte arg0, byte[] arg1) {
+		public void OnReceiveMsgCardData(byte arg0, byte[] rawData) {
 			Log.Debug("UniMag", "OnReceiveMsgCardData");
 			Log.Debug("UniMag", "Successful swipe!");
 
-			String strData = new String (arg1);
-			Log.Debug("UniMag", "SWIPE - " + strData);
+			var rawSwipeData = new Java.Lang.String (rawData);
+			string swipeData = rawSwipeData.ToString ();
+			Log.Debug("UniMag", "SWIPE - " + swipeData);
 			if(UniMagReader.IsSwipeCardRunning) {
 				UniMagReader.StopSwipeCard();
 			}
 
 			// Match the data we want.
-			String pattern = "%B(\\d+)\\^([^\\^]+)\\^(\\d{4})";
+			string pattern = "%B(\\d+)\\^([^\\^]+)\\^(\\d{4})";
 			Log.Debug("UniMag", pattern);
-			Java.Util.Regex.Pattern r = Java.Util.Regex.Pattern.Compile(pattern);
-			Matcher m = r.Matcher(strData);
+			Java.Util.Regex.Pattern patternObject = Java.Util.Regex.Pattern.Compile (pattern);
+			Matcher matcher = patternObject.Matcher(swipeData);
 			string card = "";
 			string name = "";
 			string exp = "";
-			string data = "";
-			if(m.Find()) {
-				for(int a = 0; a < m.GroupCount(); ++a) {
-					Log.Debug("UniMag", a + " - "+m.Group(a));
+			string cardData = "";
+			if(matcher.Find()) {
+				for(int a = 0; a < matcher.GroupCount(); ++a) {
+					Log.Debug("UniMag", a + " - "+matcher.Group(a));
 				}
-				card = m.Group(1);
-				name = m.Group(2);
-				exp = m.Group(3);
 
-				data = "Data: " + name + " -- " + card + " -- " + exp;
-				Log.Debug("UniMag", data);
+				card = matcher.Group(1);
+				name = matcher.Group(2);
+				exp = matcher.Group (3);
+
+				cardData = "Data: " + name + " -- " + card + " -- " + exp;
+				Log.Debug("UniMag", cardData);
+				OnCreditCardSwiped (cardData);
 			}
 
 		}
