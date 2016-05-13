@@ -163,3 +163,9 @@ $RECYCLE.BIN/
 Misc/RussianTeam/Webdav/PetkaWebDav.Web/App_Data/aspnet-PetkaWebDav.Web-20130820102208.mdf
 Misc/RussianTeam/Webdav/PetkaWebDav.Web/App_Data/aspnet-PetkaWebDav.Web-20130820102208_log.ldf
 /MicroNet.MMP.BackOfficeWeb/Content/MIC/css/sb-admin-2.css
+
+## Xamarin stuff
+Components
+[Pp]ackages
+*.userprefs
+Resource.designer.cs
