@@ -13,9 +13,13 @@ namespace SquareRoot.Droid
     [Activity(Label = "SquareRoot", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
+		private static Context _applicationContent;
+
 		protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+			_applicationContent = Application.ApplicationContext;
 
             UnityConfig.Initialize();
             global::Xamarin.Forms.Forms.Init(this, bundle);
@@ -24,7 +28,7 @@ namespace SquareRoot.Droid
 
 		public static Context GetApplicationContext()
 		{
-			return this.Application.ApplicationContext;
+			return _applicationContent;
 		}
     }
 }
