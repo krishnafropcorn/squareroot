@@ -55,7 +55,7 @@
                                         Property=Height,
                                         Factor=0.7}">
 
-                                          <Label BackgroundColor=
+      <Label BackgroundColor=
 	   "Transparent"  IsVisible="true"
         Font="Large"
         FontAttributes="None"
@@ -70,7 +70,7 @@
     </ContentView>
     <!-- this is view,we can add controls to this(ContentView is UIView)-->
 
-    <ContentView x:Name="_chargeView" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" 
+    <ContentView x:Name="PaymentChargeView" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" 
     RelativeLayout.XConstraint=
                  "{ConstraintExpression Type=Constant,
                                        

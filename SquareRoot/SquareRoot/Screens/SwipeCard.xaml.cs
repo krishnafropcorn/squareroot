@@ -11,32 +11,32 @@ namespace SquareRoot
 {
     public partial class SwipeCard : ContentPage
     {
-		private ICardReaderHelper _cardReaderHelper;
+        private ICardReaderHelper _cardReaderHelper;
 
-		public SwipeCard()
+        public SwipeCard()
         {
             InitializeComponent();
 
-			_cardReaderHelper = UnityProvider.Container.Resolve<ICardReaderHelper>();
+            _cardReaderHelper = UnityProvider.Container.Resolve<ICardReaderHelper>();
         }
 
         protected override void OnAppearing()
         {
-			base.OnAppearing ();
-			_cardReaderHelper.StartListening ((string cardDetails) => {
-				Device.BeginInvokeOnMainThread (async () => {
-					if (_cardReaderHelper.CreditCardDetails == null)
-						await DisplayAlert ("Invalid Swipe", "Please swipe again", "OK`");
-					else
+            base.OnAppearing ();
+            _cardReaderHelper.StartListening ((string cardDetails) => {
+                Device.BeginInvokeOnMainThread (async () => {
+                    if (_cardReaderHelper.CreditCardDetails == null)
+                        await DisplayAlert ("Invalid Swipe", "Please swipe again", "OK`");
+                    else
                     {
                         await DisplayAlert ("Valid Swipe", "Please share the content of this alert box with kartikbb@gmail.com: Card Details: " + cardDetails, "OK`");
                         ShowPaymentScreen();
                     }
-				});
-			});
-        
+                });
+            });
+
             ShowPaymentScreen();
-		}
+        }
 
         public async void OnChargeClicked(object sender,EventArgs args)
         {
@@ -68,29 +68,29 @@ namespace SquareRoot
             BtnCharge.IsEnabled = true;
         }
 
-		private async Task ShowReaderAvailableUi ()
+        private async Task ShowReaderAvailableUi ()
         {
             UserInstructionLabel.IsVisible = true;
-            _chargeView.IsVisible = false;
-			UserInstructionLabel.Text = "Connect Reader";
+            PaymentChargeView.IsVisible = false;
+            UserInstructionLabel.Text = "Connect Reader";
 
-			while (!_cardReaderHelper.IsReaderPlugged) {
-				await DisplayAlert ("Reader Unavailable", "Connect the reader", "Retry");
-			}
+            while (!_cardReaderHelper.IsReaderPlugged) {
+                await DisplayAlert ("Reader Unavailable", "Connect the reader", "Retry");
+            }
 
-			ShowSwipeCardUi ();
-		}
+            ShowSwipeCardUi ();
+        }
 
-		private void ShowSwipeCardUi ()
-		{
-			UserInstructionLabel.Text = "Swipe Card Now";
-		}
+        private void ShowSwipeCardUi ()
+        {
+            UserInstructionLabel.Text = "Swipe Card Now";
+        }
 
-		void ShowPaymentScreen ()
-		{
-			UserInstructionLabel.IsVisible = false;
-            _chargeView.IsVisible = true;
-		}
+        void ShowPaymentScreen ()
+        {
+            UserInstructionLabel.IsVisible = false;
+            PaymentChargeView.IsVisible = true;
+        }
     }
 }
 
