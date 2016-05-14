@@ -123,7 +123,7 @@
       <Name>CardReader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\Common.csproj">
-      <Project>{75482cf6-53d4-4a3d-9986-4965508987c7}</Project>
+      <Project>{75482CF6-53D4-4A3D-9986-4965508987C7}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\SquareRoot\SquareRoot.csproj">
@@ -133,6 +133,10 @@
     <ProjectReference Include="..\..\PaymentService.PCL\PaymentService.PCL.csproj">
       <Project>{0813203C-A1C1-497A-BC95-7A7177D09231}</Project>
       <Name>PaymentService.PCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UniMag.Sdk.Bindings.iOS\UniMag.Sdk.Bindings.iOS.csproj">
+      <Project>{C495963F-1F05-4003-BF09-6E5CB7D7B955}</Project>
+      <Name>UniMag.Sdk.Bindings.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

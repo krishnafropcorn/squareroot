@@ -2,84 +2,101 @@
 using System.Threading.Tasks;
 using Stripe;
 using Common;
+using System.Diagnostics;
 
 namespace Payment
 {
     public class StripePaymentService: IPaymentService
     {
-		bool _initialize;
+        bool _initialize;
 
-		public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int charge)
-		{
-			Initialize ();
+        public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int charge)
+        {
+            Initialize();
 
-			var myCharge = new StripeChargeCreateOptions();
+            var myCharge = new StripeChargeCreateOptions();
 
-			// always set these properties
-			myCharge.Amount = charge;
-			myCharge.Currency = "usd";
+            // always set these properties
+            myCharge.Amount = charge;
+            myCharge.Currency = "usd";
 
-			// set this if you want to
-			myCharge.Description = "Test charge";
+            // set this if you want to
+            myCharge.Description = "Test charge";
 
-			myCharge.SourceCard = new SourceCard
-			{
-				Number = cardDeatils.CreditCardNumber,
-				ExpirationMonth = cardDeatils.CardExpiryMonth.ToString(),
-				ExpirationYear = cardDeatils.CardExpiryYear.ToString(),
-				Cvc = cardDeatils.CVV
-			};
+            myCharge.SourceCard = new SourceCard
+            {
+                Number = cardDeatils.CreditCardNumber,
+                ExpirationMonth = cardDeatils.CardExpiryMonth.ToString(),
+                ExpirationYear = cardDeatils.CardExpiryYear.ToString(),
+                Cvc = cardDeatils.CVV
+            };
 
-			TaskCompletionSource<ChargeCardResponse> taskCompletionSource = new TaskCompletionSource<ChargeCardResponse>();
+            TaskCompletionSource<ChargeCardResponse> taskCompletionSource = new TaskCompletionSource<ChargeCardResponse>();
 
-			Task.Run(() =>
-				{
-					StripeCharge chargeResponse =
-						(new StripeChargeService()).Create(myCharge);
+            Task.Run(() =>
+                {
+                    try
+                    {
+                        StripeCharge chargeResponse =
+                            (new StripeChargeService()).Create(myCharge);
 
-					ChargeCardResponse toReturn = new ChargeCardResponse()
-					{
-						IsSuccessFull = string.IsNullOrEmpty(chargeResponse.FailureMessage),
-						FailureMessage = chargeResponse.FailureMessage,
-						FailureCode = chargeResponse.FailureCode
-					};
 
-					taskCompletionSource.SetResult(toReturn);
-				});
+                        ChargeCardResponse toReturn = new ChargeCardResponse()
+                        {
+                            IsSuccessFull = string.IsNullOrEmpty(chargeResponse.FailureMessage),
+                            FailureMessage = chargeResponse.FailureMessage,
+                            FailureCode = chargeResponse.FailureCode
+                        };
 
-			return taskCompletionSource.Task;
-		}
+                        taskCompletionSource.SetResult(toReturn);
 
-		public Task<CardToken> TokenizeCard(CardDetails cardDeatils)
-		{
-			Initialize ();
+                    }
+                    catch (Exception ex)
+                    {
+                        ChargeCardResponse toReturn = new ChargeCardResponse()
+                            {
+                                IsSuccessFull = false,
+                                FailureMessage = ex.Message
+                            };
+
+                        taskCompletionSource.SetResult(toReturn);
+                    }
+
+                });
+
+            return taskCompletionSource.Task;
+        }
+
+        public Task<CardToken> TokenizeCard(CardDetails cardDeatils)
+        {
+            Initialize();
 
             StripeCreditCardOptions option = new StripeCreditCardOptions
             {
-				Number = cardDeatils.CreditCardNumber,
-				ExpirationMonth = cardDeatils.CardExpiryMonth.ToString(),
-				ExpirationYear = cardDeatils.CardExpiryYear.ToString(),
-				Cvc = cardDeatils.CVV
+                Number = cardDeatils.CreditCardNumber,
+                ExpirationMonth = cardDeatils.CardExpiryMonth.ToString(),
+                ExpirationYear = cardDeatils.CardExpiryYear.ToString(),
+                Cvc = cardDeatils.CVV
             };
 
-			TaskCompletionSource<CardToken> taskCompletionSource = new TaskCompletionSource<CardToken>();
+            TaskCompletionSource<CardToken> taskCompletionSource = new TaskCompletionSource<CardToken>();
 
             Task.Run(() =>
-            {
-                StripeToken cardToken =
-                    (new StripeTokenService()).Create(new StripeTokenCreateOptions {Card = option});
-
-					CardToken toReturn = new CardToken()
                 {
-                     CardBrand = cardToken.StripeCard.Brand,
-                     ProviderCardFingerprint = "TEST_FINGERPRINT",
-                     ProviderCardId = cardToken.StripeCard.AccountId,
-                     ProviderTokenId = cardToken.Id,
-                     CardLast4 = cardToken.StripeCard.Last4
-                };
+                    StripeToken cardToken =
+                        (new StripeTokenService()).Create(new StripeTokenCreateOptions { Card = option });
 
-                taskCompletionSource.SetResult(toReturn);
-            });
+                    CardToken toReturn = new CardToken()
+                    {
+                        CardBrand = cardToken.StripeCard.Brand,
+                        ProviderCardFingerprint = "TEST_FINGERPRINT",
+                        ProviderCardId = cardToken.StripeCard.AccountId,
+                        ProviderTokenId = cardToken.Id,
+                        CardLast4 = cardToken.StripeCard.Last4
+                    };
+
+                    taskCompletionSource.SetResult(toReturn);
+                });
 
             return taskCompletionSource.Task;
         }
@@ -105,11 +122,13 @@ namespace Payment
             return null;
         }
 
-		private void Initialize() {
-			if (!_initialize) {
-				StripeConfiguration.SetApiKey ("sk_aMWXkRf9GikydNO5xEm0q8sih9g4Q");
-				_initialize = true;
-			}
-		}
+        private void Initialize()
+        {
+            if (!_initialize)
+            {
+                StripeConfiguration.SetApiKey("sk_aMWXkRf9GikydNO5xEm0q8sih9g4Q");
+                _initialize = true;
+            }
+        }
     }
 }
