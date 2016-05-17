@@ -82,7 +82,7 @@ namespace SquareRoot
             
 			if (!_cardReaderHelper.IsReaderPlugged) {
 				UserInstructionLabel.Text = "Please connect the reader";
-				// ToDo: make retry button visible
+                BtnRetry.IsVisible = true;
 			}
 			else
             	ShowSwipeCardUi ();
@@ -90,15 +90,16 @@ namespace SquareRoot
 
         private void ShowSwipeCardUi ()
         {
-			// ToDo: make retry button invisible
             UserInstructionLabel.Text = "Swipe Card Now";
+            BtnRetry.IsVisible = false;
+            PaymentChargeView.IsVisible = false;
         }
 
 		private void ShowPaymentScreen ()
         {
+            PaymentChargeView.IsVisible = true;
             BtnRetry.IsVisible = false;
             UserInstructionLabel.IsVisible = false;
-            PaymentChargeView.IsVisible = true;
         }
     }
 }
