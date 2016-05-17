@@ -13,38 +13,45 @@ using Common;
 namespace SquareRoot.Droid
 {
 	class UnimagCardReaderHelper : ICardReaderHelper,IUniMagReaderMsg
-    {
-        public bool IsReaderPlugged { get; private set; }
+	{
+		public bool IsReaderPlugged { get; private set; }
+
+		public IntPtr Handle{ get; set;}
 
 		UniMagReader UniMagReader;
-        
+
 		public CardDetails CreditCardDetails { get; private set; }
 
 		Action<string> OnCreditCardSwiped;
 
-		public void StartListening(Action OnCreditCardSwiped)
-        {
-            IsReaderPlugged = false;
-            CreditCardDetails = null;
-			UniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext());
+		public void StartListening(Action<string> OnCreditCardSwiped)
+		{
+			IsReaderPlugged = false;
+			CreditCardDetails = null;
+			UniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
 			UniMagReader.SetSaveLogEnable(false);
 			UniMagReader.SetXMLFileNameWithPath(null);
-			UniMagReader.LoadingConfigurationXMLFile(true);
+			//UniMagReader.LoadingConfigurationXMLFile(true);
 			this.OnCreditCardSwiped = OnCreditCardSwiped;
 			//myUniMagReader.setVerboseLoggingEnable(true);
 			UniMagReader.RegisterListen();
-            // ToDo: Attach to listeners
-        }
+			// ToDo: Attach to listeners
+		}
 
-        public void StopListening()
-        {
-            IsReaderPlugged = false;
-            CreditCardDetails = null;
+		public void StopListening()
+		{
+			IsReaderPlugged = false;
+			CreditCardDetails = null;
 			UniMagReader.StopSwipeCard();
 			UniMagReader.UnregisterListen();
 			UniMagReader.Release();
-            // ToDo: Detach from listeners
-        }
+			// ToDo: Detach from listeners
+		}
+
+		public void OnReceiveMsgAutoConfigProgress (int p0, double p1, string p2)
+		{
+			Log.Debug("UniMag", "OnReceiveMsgAutoConfigProgress");
+		}
 
 		public bool GetUserGrant (int arg0, string arg1)
 		{
@@ -57,7 +64,7 @@ namespace SquareRoot.Droid
 			Log.Debug("UniMag", "OnReceiveMsgAutoConfigProgress");
 		}
 
-		public void OnReceiveMsgCardData(byte arg0, byte[] rawData) {
+		public void OnReceiveMsgCardData(sbyte arg0, byte[] rawData) {
 			Log.Debug("UniMag", "OnReceiveMsgCardData");
 			Log.Debug("UniMag", "Successful swipe!");
 
@@ -93,8 +100,15 @@ namespace SquareRoot.Droid
 
 		}
 
+		public void OnReceiveMsgProcessingCardData (){
+		}
+
 		public void OnReceiveMsgCommandResult(int arg0, byte[] arg1) {
 			Log.Debug("UniMag", "OnReceiveMsgCommandResult");
+		}
+
+		public void OnReceiveMsgToCalibrateReader ()
+		{
 		}
 
 		public void OnReceiveMsgConnected() {
@@ -110,30 +124,33 @@ namespace SquareRoot.Droid
 
 			UniMagReader.Release();
 		}
-			
-		public void OnReceiveMsgFailureInfo(int arg0, String arg1) {
+
+		public void OnReceiveMsgFailureInfo(int arg0, string arg1) {
 			Log.Debug("UniMag","OnReceiveMsgFailureInfo -- " + arg1);
 		}
-		 
-		public void OnReceiveMsgSDCardDFailed(String arg0) {
+
+		public void OnReceiveMsgSDCardDFailed(string arg0) {
 			Log.Debug("UniMag", "OnReceiveMsgSDCardDFailed -- " + arg0);
 		}
-		 
-		public void OnReceiveMsgTimeout(String arg0) {
+
+		public void OnReceiveMsgTimeout(string arg0) {
 			Log.Debug("UniMag", "OnReceiveMsgTimeout -- " + arg0);
 			Log.Debug("UniMag","Timed out!");
 		}
-		 
+
 		public void OnReceiveMsgToConnect() {
 			Log.Debug("UniMag","Swiper Powered Up");
 		}
-		 
+
 		public void OnReceiveMsgToSwipeCard() {
 			Log.Debug("UniMag","OnReceiveMsgToSwipeCard");      
 		}
-			
+
 		public void OnReceiveMsgAutoConfigCompleted(StructConfigParameters arg0) {
 			Log.Debug("UniMag", "OnReceiveMsgAutoConfigCompleted");
 		}
-    }
+
+		public void Dispose()
+		{}
+	}
 }

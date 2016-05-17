@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android.Content;
+using HockeyApp;
 
 namespace SquareRoot.Droid
 {
@@ -18,6 +19,8 @@ namespace SquareRoot.Droid
 		protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+			CrashManager.Register(this, "46cd80cc0e5d4a3fb523fd0fa5d64bd6");
 
 			_applicationContent = Application.ApplicationContext;
 

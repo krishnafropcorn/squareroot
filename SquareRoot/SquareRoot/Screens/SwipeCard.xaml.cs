@@ -35,7 +35,7 @@ namespace SquareRoot
                 });
             });
 
-            ShowPaymentScreen();
+			ShowReaderAvailableUi();
         }
 
         public async void OnChargeClicked(object sender,EventArgs args)
@@ -68,25 +68,32 @@ namespace SquareRoot
             BtnCharge.IsEnabled = true;
         }
 
+		public async void OnRetryClicked(object sender,EventArgs args) {
+			if (_cardReaderHelper.IsReaderPlugged) {
+				Device.BeginInvokeOnMainThread (() => ShowSwipeCardUi ());
+			}				
+		}
+
         private async Task ShowReaderAvailableUi ()
         {
             UserInstructionLabel.IsVisible = true;
             PaymentChargeView.IsVisible = false;
-            UserInstructionLabel.Text = "Connect Reader";
-
-            while (!_cardReaderHelper.IsReaderPlugged) {
-                await DisplayAlert ("Reader Unavailable", "Connect the reader", "Retry");
-            }
-
-            ShowSwipeCardUi ();
+            
+			if (!_cardReaderHelper.IsReaderPlugged) {
+				UserInstructionLabel.Text = "Please connect the reader";
+				// ToDo: make retry button visible
+			}
+			else
+            	ShowSwipeCardUi ();
         }
 
         private void ShowSwipeCardUi ()
         {
+			// ToDo: make retry button invisible
             UserInstructionLabel.Text = "Swipe Card Now";
         }
 
-        void ShowPaymentScreen ()
+		private void ShowPaymentScreen ()
         {
             UserInstructionLabel.IsVisible = false;
             PaymentChargeView.IsVisible = true;
