@@ -34,38 +34,39 @@ namespace SquareRoot
                     }
                 });
             });
-
 			ShowReaderAvailableUi();
         }
 
         public async void OnChargeClicked(object sender,EventArgs args)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            if (BtnCharge.Text == "Charge")
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        BtnCharge.Text = "Charging...";
+                    });
+
+                var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
+                var result = await paymentService.ChargeCard(new CardDetails()
+                    {
+                        CreditCardNumber = "4000000000000077",
+                        CardExpiryMonth = 04,
+                        CardExpiryYear = 2018,
+                        CVV = TxtCCV.Text
+                    }, Convert.ToInt16(TxtAmonut.Text));
+
+                if (result.IsSuccessFull)
                 {
-                    BtnCharge.Text = "Charging...";
-                    BtnCharge.IsEnabled = false;
-                });
+                    await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
+                    await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
+                }
 
-            var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
-            var result = await paymentService.ChargeCard(new CardDetails () {
-                CreditCardNumber = "4000000000000077",
-                CardExpiryMonth = 04,
-                CardExpiryYear = 2018,
-                CVV = TxtCCV.Text
-            },Convert.ToInt16(TxtAmonut.Text));
-
-            if (result.IsSuccessFull)
-            {
-                await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
-                await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
+                BtnCharge.Text = "Charge";
             }
-            else
-            {
-                await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
-            }
-
-            BtnCharge.Text = "Charge";
-            BtnCharge.IsEnabled = true;
         }
 
 		public async void OnRetryClicked(object sender,EventArgs args) {
@@ -95,6 +96,7 @@ namespace SquareRoot
 
 		private void ShowPaymentScreen ()
         {
+            BtnRetry.IsVisible = false;
             UserInstructionLabel.IsVisible = false;
             PaymentChargeView.IsVisible = true;
         }
