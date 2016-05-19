@@ -14,8 +14,8 @@
 				</ContentView>
 				<ContentView x:Name="PaymentChargeView" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}" RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=0.7}">
 					<StackLayout Padding="20">
-						<local:NumberedEntry x:Name="TxtCCV" Placeholder="Enter CVV" HorizontalOptions="FillAndExpand" VerticalOptions="Fill"/>
-						<local:NumberedEntry x:Name="TxtAmonut" Placeholder="Enter Amount" HorizontalOptions="FillAndExpand" VerticalOptions="Fill"/>
+						<local:NumberedEntry x:Name="TxtCCV" Placeholder="Enter CVV" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
+						<local:NumberedEntry x:Name="TxtAmonut" Placeholder="Enter Amount" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
 						<Button x:Name="BtnCharge" Text="Charge" Clicked="OnChargeClicked" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" BackgroundColor="Maroon" TextColor="White"/>
 					</StackLayout>
 				</ContentView>
