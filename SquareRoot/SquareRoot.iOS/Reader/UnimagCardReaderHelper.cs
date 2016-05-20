@@ -70,9 +70,9 @@ namespace SquareRoot.iOS.Reader
             try
             {
                 var data = notification.Object;
-                var data1 = notification.Name;
-                var data2 = notification.UserInfo;
-                var data3 = notification.Object.Description;
+                //var data1 = notification.Name;
+                //var data2 = notification.UserInfo;
+//                var data3 = notification.Object.Description;
 
                 this.onCreditCardSwiped(data.ToString());//This will rise the  StartListening event in the ContentPage
             }
@@ -85,15 +85,16 @@ namespace SquareRoot.iOS.Reader
         //called when SDK received a swipe successfully
         private void umSwipe_receivedSwipe(NSNotification notification)
         {
-            UniMagAlert.ShowAlert("Info", "Swipe_receivedSwipe...");
             try
             {
-                var data1 = notification.Name;
-                var data2 = notification.UserInfo;
+//                var data1 = notification.Name;
+//                var data2 = notification.UserInfo;
                 var data3 = notification.Object;
-                var data = notification.Object.Description;
+//                var data = notification.Object.Description;
 
-                this.onCreditCardSwiped(data2.ToString());//This will rise the  StartListening event in the ContentPage
+				UniMagAlert.ShowAlert("Credit card details", data3.ToString());
+
+                this.onCreditCardSwiped(data3.ToString());//This will rise the  StartListening event in the ContentPage
             }
             catch (Exception ex)
             {
