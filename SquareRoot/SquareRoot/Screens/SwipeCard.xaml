@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="SquareRoot.SwipeCard" xmlns:local="clr-namespace:SquareRoot;assembly=SquareRoot" Title="Reader Demo" BackgroundColor="White">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+			 x:Class="SquareRoot.SwipeCard" 
+			 xmlns:viewModels="clr-namespace:SquareRoot;assembly=SquareRoot"
+			 xmlns:local="clr-namespace:SquareRoot;assembly=SquareRoot" 
+			 Title="Reader Demo" BackgroundColor="White">
+
+  <ContentPage.BindingContext>
+    <viewModels:SwipeCardViewModel/>
+  </ContentPage.BindingContext>
+
 	<RelativeLayout>
 		<StackLayout Padding="0,20,0,0" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}" RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent,Property=Height,Factor=0.3}">
 			<Label Text="UniMag Demo" TextColor="Maroon" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand" />
@@ -14,8 +24,8 @@
 				</ContentView>
 				<ContentView x:Name="PaymentChargeView" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}" RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=0.7}">
 					<StackLayout Padding="20">
-						<local:NumberedEntry x:Name="TxtCCV" Placeholder="Enter CVV" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
-						<local:NumberedEntry x:Name="TxtAmonut" Placeholder="Enter Amount" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
+						<local:NumberedEntry x:Name="TxtCCV" Placeholder = "Enter CVV" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
+						<local:NumberedEntry x:Name="TxtAmonut" Placeholder = "Enter Amount" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" Keyboard = "Numeric"/>
 						<Button x:Name="BtnCharge" Text="Charge" Clicked="OnChargeClicked" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" BackgroundColor="Maroon" TextColor="White"/>
 					</StackLayout>
 				</ContentView>

@@ -49,6 +49,7 @@
       <DependentUpon>SwipeCard.xaml</DependentUpon>
     </Compile>
     <Compile Include="NumberedEntry.cs" />
+    <Compile Include="ViewModels\SwipeCardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">

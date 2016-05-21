@@ -32,6 +32,7 @@ namespace SquareRoot.iOS.Reader
 
         public void StartListening(Action<string> onCreditCardSwiped)
         {
+
             this.onCreditCardSwiped = onCreditCardSwiped;
             uniMag.EnableLogging(true);
             reader = new uniMag();
@@ -66,20 +67,7 @@ namespace SquareRoot.iOS.Reader
         // Use this to provide an early feedback on the UI
         private void umDataProcessing(NSNotification notification)
         {
-            UniMagAlert.ShowAlert("Info", "data processing...");
-            try
-            {
-                var data = notification.Object;
-                //var data1 = notification.Name;
-                //var data2 = notification.UserInfo;
-//                var data3 = notification.Object.Description;
 
-                this.onCreditCardSwiped(data.ToString());//This will rise the  StartListening event in the ContentPage
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
 
         //called when SDK received a swipe successfully
@@ -87,14 +75,39 @@ namespace SquareRoot.iOS.Reader
         {
             try
             {
-//                var data1 = notification.Name;
-//                var data2 = notification.UserInfo;
-                var data3 = notification.Object;
-//                var data = notification.Object.Description;
+                var data = notification.Object;
 
-				UniMagAlert.ShowAlert("Credit card details", data3.ToString());
+//                B4342570993000729^JURANEK/ THOMAS           ^19052010000000      00207000000?;4342570993000729=19052010000000207?
+//               %B4485240000223063^JURANEK/SCOTT             ^2005201000002200000000546000000?;4485240000223063=20052010000054622000?\r";
+                CardDetails objCardDetails = new CardDetails();
+                string tempData = data.ToString();
+                string[] dataSubstrings = tempData.Split('^');
+                if(dataSubstrings.Length>2)
+                {
+                    string[] nameValues = dataSubstrings[1].Split('/');
+                    if(nameValues.Length>=2)
+                    {
+                        objCardDetails.CardLastName=nameValues[0].Trim();
+                        objCardDetails.CardFirstName=nameValues[1].Trim();
+                    }
 
-                this.onCreditCardSwiped(data3.ToString());//This will rise the  StartListening event in the ContentPage
+                    string[] cardDetails = dataSubstrings[2].Split(';');
+                    if (cardDetails.Length >= 2)
+                    {
+                        string[] cardNumbers = cardDetails[1].Split('=');
+                        if (cardNumbers.Length >= 1)
+                        {
+                            objCardDetails.CreditCardNumber = cardNumbers[0].Trim();
+                        }
+                        objCardDetails.CardExpiryYear = Convert.ToInt32(cardDetails[0].Substring(0,2));
+                        objCardDetails.CardExpiryMonth = Convert.ToInt32(cardDetails[0].Substring(2,2));
+                    }
+                }
+
+                CreditCardDetails = objCardDetails;
+                UniMagAlert.ShowAlert("Credit card details", tempData);
+                this.onCreditCardSwiped(tempData);//This will rise the  StartListening event in the ContentPage
+            
             }
             catch (Exception ex)
             {
@@ -106,7 +119,6 @@ namespace SquareRoot.iOS.Reader
         // "swipe timeout interval".
         private void umSwipe_timeout(NSNotification notification)
         {
-            UniMagAlert.ShowAlert("Info", "Swipe timeout,please try again");
         }
 
         void uniMag_deactivate()
@@ -169,8 +181,8 @@ namespace SquareRoot.iOS.Reader
         //called whenumDevice_detachment
         private void umDevice_detachment(NSNotification notification)
         {
-            UmRet swipeStatus = this.reader.RequestSwipe;
-            displayDeviceStatus(swipeStatus);
+//            UmRet swipeStatus = this.reader.RequestSwipe;
+//            displayDeviceStatus(swipeStatus);
         }
 
         //called when successfully starting the connection task

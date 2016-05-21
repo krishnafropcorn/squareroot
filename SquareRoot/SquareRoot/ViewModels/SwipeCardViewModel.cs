@@ -1,7 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System.Text.RegularExpressions;
 using Microsoft.Practices.Unity;
 using Payment;
 using Common;
@@ -22,19 +22,11 @@ namespace SquareRoot
 
         #endregion
 
-        public ICommand ChargeCommand { get; set; }
-
-        public bool HasValidInput 
-        {
-            get 
-            {
-                return !string.IsNullOrEmpty(_cvv.ToString()) && !string.IsNullOrEmpty(_amount.ToString()); 
-            }
-        }
-
         private int _cvv;
 
         private int _amount;
+
+        private string _buttonStatus;
 
         public int CVV
         {
@@ -44,7 +36,6 @@ namespace SquareRoot
                 if (value != _cvv)
                 {
                     _cvv = value;
-                    OnPropertyChanged("CVV");
                     OnPropertyChanged("HasValidInput");
                 }
             }
@@ -58,42 +49,74 @@ namespace SquareRoot
                 if (value != _amount)
                 {
                     _amount = value;
-                    OnPropertyChanged("Amount");
                     OnPropertyChanged("HasValidInput");
                 }
             }
         }
 
-        public SwipeCardViewModel()
+        public string ButtonStatus
         {
-            CVV = null;
+            get
+            {
+                return _buttonStatus;
+            }
+            set
+            {
+                _buttonStatus = value;
+                OnPropertyChanged("ButtonStatus");
+            }
+        }
 
-            Amount = null;
+        public ICommand ChargeCommand { get; set; }
 
-            ChargeCommand = new Command(Charge);
+        public bool HasValidInput 
+        {
+            get 
+            {
+                return isValidCVV(_cvv) && isValidAmoount(_amount); 
+            }
+        }
+
+        private bool isValidCVV(int cvv)
+        {
+            return Regex.IsMatch(cvv.ToString(),"/^[0-9]{3,4}$/");
+        }
+
+        private bool isValidAmoount(int cvv)
+        {
+            return Regex.IsMatch(cvv.ToString(),"^[0-9]*$");
 
         }
 
-        private async void Charge()
+        public SwipeCardViewModel()
         {
-//                var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
-//                var result = await paymentService.ChargeCard(new CardDetails()
-//                    {
-//                        CreditCardNumber = "4000000000000077",
-//                        CardExpiryMonth = 04,
-//                        CardExpiryYear = 2018,
-//                        CVV = TxtCCV.Text
-//                    }, Convert.ToInt16(TxtAmonut.Text));
+            ChargeCommand = new Command(Charge);
+        }
+
+        private void Charge()
+        {
+            ButtonStatus = "Charging..";
+
+//            var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
+//            var result = await paymentService.ChargeCard(new CardDetails()
+//                {
+//                    CreditCardNumber = _cardReaderHelper.CreditCardDetails.CreditCardNumber, //"4000000000000077",
+//                    CardExpiryMonth = _cardReaderHelper.CreditCardDetails.CardExpiryMonth,// 04,
+//                    CardExpiryYear = _cardReaderHelper.CreditCardDetails.CardExpiryYear,//2018,
+//                    CVV = TxtCCV.Text
+//                }, Convert.ToInt16(TxtAmonut.Text));
 //
-//                if (result.IsSuccessFull)
-//                {
-//                    await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
-//                    await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
-//                }
-//                else
-//                {
-//                    await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
-//                }
+//            if (result.IsSuccessFull)
+//            {
+//                await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
+//                await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
+//            }
+//            else
+//            {
+//                await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
+//            }
+
+            ButtonStatus = "Charge";
         }
 
     }

@@ -25,8 +25,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodesignProvision>6557154c-6954-4ada-9557-f2c27977a22a</CodesignProvision>
-    <CodesignKey>iPhone Developer: Krishna M (7U4USUJAQV)</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>

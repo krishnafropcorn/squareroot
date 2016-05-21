@@ -22,6 +22,7 @@ namespace SquareRoot
 
         protected override void OnAppearing()
         {
+            PaymentChargeView.IsVisible = false;
             base.OnAppearing ();
             _cardReaderHelper.StartListening ((string cardDetails) => {
                 Device.BeginInvokeOnMainThread (async () => {
@@ -49,9 +50,9 @@ namespace SquareRoot
                 var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
                 var result = await paymentService.ChargeCard(new CardDetails()
                     {
-                        CreditCardNumber = "4000000000000077",
-                        CardExpiryMonth = 04,
-                        CardExpiryYear = 2018,
+                        CreditCardNumber = _cardReaderHelper.CreditCardDetails.CreditCardNumber, //"4000000000000077",
+                        CardExpiryMonth = _cardReaderHelper.CreditCardDetails.CardExpiryMonth,// 04,
+                        CardExpiryYear = _cardReaderHelper.CreditCardDetails.CardExpiryYear,//2018,
                         CVV = TxtCCV.Text
                     }, Convert.ToInt16(TxtAmonut.Text));
 
@@ -95,7 +96,7 @@ namespace SquareRoot
             PaymentChargeView.IsVisible = false;
         }
 
-		private void ShowPaymentScreen ()
+		private async void ShowPaymentScreen ()
         {
             PaymentChargeView.IsVisible = true;
             BtnRetry.IsVisible = false;
