@@ -49,6 +49,8 @@ namespace SquareRoot
 
                 var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
 
+				_cardReaderHelper.CreditCardDetails.CVV = TxtCCV.Text;
+
                 var result = await paymentService.ChargeCard(_cardReaderHelper.CreditCardDetails, Convert.ToInt16(TxtAmonut.Text));
 
                 if (result.IsSuccessFull)
