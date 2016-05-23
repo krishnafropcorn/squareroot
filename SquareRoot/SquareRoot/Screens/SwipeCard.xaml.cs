@@ -48,22 +48,21 @@ namespace SquareRoot
                     });
 
                 var paymentService = UnityProvider.Container.Resolve<IPaymentService>();
-                var result = await paymentService.ChargeCard(new CardDetails()
-                    {
-                        CreditCardNumber = _cardReaderHelper.CreditCardDetails.CreditCardNumber, //"4000000000000077",
-                        CardExpiryMonth = _cardReaderHelper.CreditCardDetails.CardExpiryMonth,// 04,
-                        CardExpiryYear = _cardReaderHelper.CreditCardDetails.CardExpiryYear,//2018,
-                        CVV = TxtCCV.Text
-                    }, Convert.ToInt16(TxtAmonut.Text));
+
+                var result = await paymentService.ChargeCard(_cardReaderHelper.CreditCardDetails, Convert.ToInt16(TxtAmonut.Text));
 
                 if (result.IsSuccessFull)
                 {
                     await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
                     await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
+                    TxtCCV.Text = "";
+                    TxtAmonut.Text = "";
                 }
                 else
                 {
                     await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
+                    TxtCCV.Text = "";
+                    TxtAmonut.Text = "";
                 }
 
                 BtnCharge.Text = "Charge";

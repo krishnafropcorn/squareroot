@@ -105,7 +105,6 @@ namespace SquareRoot.iOS.Reader
                 }
 
                 CreditCardDetails = objCardDetails;
-                UniMagAlert.ShowAlert("Credit card details", tempData);
                 this.onCreditCardSwiped(tempData);//This will rise the  StartListening event in the ContentPage
             
             }
@@ -150,7 +149,6 @@ namespace SquareRoot.iOS.Reader
         // wait for a swipe to be made
         private void umSwipe_starting(NSNotification notification)
         {
-            UniMagAlert.ShowAlert("Info", "Waiting for card swipe...");
         }
 
         //called when umSwipe_invalid
@@ -285,9 +283,5 @@ namespace SquareRoot.iOS.Reader
         {
             // this is where we shuttle the data
         }
-        //Our methods
-        //        private void onCardDetailsReceived(string cardDetails)
-        //        {
-        //        }
     }
 }

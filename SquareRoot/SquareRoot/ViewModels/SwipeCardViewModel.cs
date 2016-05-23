@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Practices.Unity;
 using Payment;
 using Common;
+using System;
 
 namespace SquareRoot
 {
@@ -93,7 +94,7 @@ namespace SquareRoot
             ChargeCommand = new Command(Charge);
         }
 
-        private void Charge()
+        private async void Charge()
         {
             ButtonStatus = "Charging..";
 
