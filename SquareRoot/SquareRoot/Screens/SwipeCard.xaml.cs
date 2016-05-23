@@ -58,8 +58,7 @@ namespace SquareRoot
 
                 if (result.IsSuccessFull)
                 {
-                    await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
-                    await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
+					await DisplayAlert("Payment Done", TxtAmonut.Text + " cents were charged on your card", "OK");
                 }
                 else
                 {
