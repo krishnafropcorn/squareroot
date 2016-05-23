@@ -126,7 +126,7 @@ namespace Payment
         {
             if (!_initialize)
             {
-                StripeConfiguration.SetApiKey("sk_aMWXkRf9GikydNO5xEm0q8sih9g4Q");
+				StripeConfiguration.SetApiKey("sk_live_vXqZiSUIp1bUEYOhYGSzzSZx");
                 _initialize = true;
             }
         }
