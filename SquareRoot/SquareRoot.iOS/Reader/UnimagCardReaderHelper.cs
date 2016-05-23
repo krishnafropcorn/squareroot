@@ -76,7 +76,7 @@ namespace SquareRoot.iOS.Reader
             {
                 var data = notification.Object;
 
-				CardDetails objCardDetails = new CardDetails(data);
+				CardDetails objCardDetails = new CardDetails(data.ToString());
 
                 onCreditCardSwiped();
             }
