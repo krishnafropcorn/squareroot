@@ -32,7 +32,6 @@ namespace SquareRoot.iOS.Reader
 
         public void StartListening(Action onCreditCardSwiped)
         {
-
             this.onCreditCardSwiped = onCreditCardSwiped;
             uniMag.EnableLogging(true);
             reader = new uniMag();
@@ -58,7 +57,7 @@ namespace SquareRoot.iOS.Reader
             if (currentStatus == UmRet.Success)
             {
                 uniMag_registerObservers(true);
-                displayDeviceStatus(currentStatus);
+                DisplayDeviceStatus(currentStatus);
             }
         }
 
@@ -101,7 +100,7 @@ namespace SquareRoot.iOS.Reader
                 currentStatus = reader.StartUniMag(false);
             }
             uniMag_registerObservers(false);
-            displayDeviceStatus(currentStatus);
+            DisplayDeviceStatus(currentStatus);
         }
 
         //called when SDK failed to handshake with reader in time. ie, the connection task has timed out
@@ -109,14 +108,14 @@ namespace SquareRoot.iOS.Reader
         {
             //connect again
             UmRet swipeStatus = this.reader.RequestSwipe;
-            displayDeviceStatus(swipeStatus);
+            DisplayDeviceStatus(swipeStatus);
         }
 
         ////called when the connection task is successful. SDK's connection state changes to true
         private void umConnection_connected(NSNotification notification)
         {
             UmRet swipeStatus = this.reader.RequestSwipe;
-            displayDeviceStatus(swipeStatus);
+            DisplayDeviceStatus(swipeStatus);
         }
 
         // wait for a swipe to be made
@@ -128,7 +127,7 @@ namespace SquareRoot.iOS.Reader
         private void umSwipe_invalid(NSNotification notification)
         {
             //swipe again alert
-            displaySwipeStatus(this.reader.RequestSwipe);
+            DisplaySwipeStatus(this.reader.RequestSwipe);
         }
 
         //called when attempting to start the connection task but iDevice's headphone playback volume is too low
@@ -146,7 +145,7 @@ namespace SquareRoot.iOS.Reader
         {
             //update status
             UmRet swipeStatus = this.reader.RequestSwipe;
-            displayDeviceStatus(swipeStatus);
+            DisplayDeviceStatus(swipeStatus);
         }
 
         //called whenumDevice_detachment
@@ -220,29 +219,28 @@ namespace SquareRoot.iOS.Reader
             }
         }
 
-        void displayDeviceStatus(UmRet swipeStatus)
+        private void DisplayDeviceStatus(UmRet swipeStatus)
         {
             switch (swipeStatus)
             {
                 case UmRet.Success: 
                 case UmRet.AlreadyConnected:
                     IsReaderPlugged = true;
-                    UniMagAlert.ShowAlert("Info", "Reader is connected.");
+                    // UniMagAlert.ShowAlert("Info", "Reader is connected.");
                     break;
                     //handle other cases
                 default : 
                     StopListening();
-                    UniMagAlert.ShowAlert("Info", "Reader not connected, please try reinserting the reader firmly.");
+                    // UniMagAlert.ShowAlert("Info", "Reader not connected, please try reinserting the reader firmly.");
                     break;
             }
         }
 
-        void displaySwipeStatus(UmRet swipeStatus)
+        private void DisplaySwipeStatus(UmRet swipeStatus)
         {
             switch (swipeStatus)
             {
                 case UmRet.Success: 
-                    UniMagAlert.ShowAlert("Info", "Swipe Success.");
                     break;
                     //handle other cases
                 default : 
