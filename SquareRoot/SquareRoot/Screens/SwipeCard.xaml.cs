@@ -53,17 +53,15 @@ namespace SquareRoot
 
                 if (result.IsSuccessFull)
                 {
-                    await DisplayAlert("Payment Done", "YoooHooo! We just charged $1000 on your card", "OK");
-                    await DisplayAlert("Just Kidding", "We are running on test account so nothing was charged :-)", "OK");
-                    TxtCCV.Text = "";
-                    TxtAmonut.Text = "";
+                    await DisplayAlert("Payment Done", TxtAmonut.Text  + " cents was charged on your card", "OK");
                 }
                 else
                 {
                     await DisplayAlert("Payment Failed", "Because: " + result.FailureMessage, "OK");
-                    TxtCCV.Text = "";
-                    TxtAmonut.Text = "";
                 }
+
+                TxtCCV.Text = "";
+                TxtAmonut.Text = "";
 
                 BtnCharge.Text = "Charge";
             }
