@@ -18,7 +18,7 @@ namespace SquareRoot.iOS.Reader
 
         public bool IsReaderPlugged { get; private set; }
 
-        private Action<string> onCreditCardSwiped;
+        private Action onCreditCardSwiped;
 
         public CardDetails CreditCardDetails { get; private set; }
 
@@ -30,7 +30,7 @@ namespace SquareRoot.iOS.Reader
             // ToDo: Detach from listeners
         }
 
-        public void StartListening(Action<string> onCreditCardSwiped)
+        public void StartListening(Action onCreditCardSwiped)
         {
 
             this.onCreditCardSwiped = onCreditCardSwiped;
@@ -77,36 +77,9 @@ namespace SquareRoot.iOS.Reader
             {
                 var data = notification.Object;
 
-//                B4342570993000729^JURANEK/ THOMAS           ^19052010000000      00207000000?;4342570993000729=19052010000000207?
-//               %B4485240000223063^JURANEK/SCOTT             ^2005201000002200000000546000000?;4485240000223063=20052010000054622000?\r";
-                CardDetails objCardDetails = new CardDetails();
-                string tempData = data.ToString();
-                string[] dataSubstrings = tempData.Split('^');
-                if(dataSubstrings.Length>2)
-                {
-                    string[] nameValues = dataSubstrings[1].Split('/');
-                    if(nameValues.Length>=2)
-                    {
-                        objCardDetails.CardLastName=nameValues[0].Trim();
-                        objCardDetails.CardFirstName=nameValues[1].Trim();
-                    }
+				CardDetails objCardDetails = new CardDetails(data);
 
-                    string[] cardDetails = dataSubstrings[2].Split(';');
-                    if (cardDetails.Length >= 2)
-                    {
-                        string[] cardNumbers = cardDetails[1].Split('=');
-                        if (cardNumbers.Length >= 1)
-                        {
-                            objCardDetails.CreditCardNumber = cardNumbers[0].Trim();
-                        }
-                        objCardDetails.CardExpiryYear = Convert.ToInt32(cardDetails[0].Substring(0,2));
-                        objCardDetails.CardExpiryMonth = Convert.ToInt32(cardDetails[0].Substring(2,2));
-                    }
-                }
-
-                CreditCardDetails = objCardDetails;
-                this.onCreditCardSwiped(tempData);//This will rise the  StartListening event in the ContentPage
-            
+                onCreditCardSwiped();
             }
             catch (Exception ex)
             {

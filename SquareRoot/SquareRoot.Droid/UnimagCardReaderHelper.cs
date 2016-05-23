@@ -22,9 +22,9 @@ namespace SquareRoot.Droid
 
 		public CardDetails CreditCardDetails { get; private set; }
 
-		Action<string> OnCreditCardSwiped;
+		Action OnCreditCardSwiped;
 
-		public void StartListening(Action<string> OnCreditCardSwiped)
+		public void StartListening(Action OnCreditCardSwiped)
 		{
 			IsReaderPlugged = false;
 			CreditCardDetails = null;
@@ -65,39 +65,19 @@ namespace SquareRoot.Droid
 		}
 
 		public void OnReceiveMsgCardData(sbyte arg0, byte[] rawData) {
-			Log.Debug("UniMag", "OnReceiveMsgCardData");
-			Log.Debug("UniMag", "Successful swipe!");
+			Log.Debug ("UniMag", "OnReceiveMsgCardData");
+			Log.Debug ("UniMag", "Successful swipe!");
 
 			var rawSwipeData = new Java.Lang.String (rawData);
 			string swipeData = rawSwipeData.ToString ();
-			Log.Debug("UniMag", "SWIPE - " + swipeData);
-			if(UniMagReader.IsSwipeCardRunning) {
-				UniMagReader.StopSwipeCard();
+
+			CreditCardDetails = new CardDetails (swipeData);
+			Log.Debug ("UniMag", "SWIPE - " + swipeData);
+			if (UniMagReader.IsSwipeCardRunning) {
+				UniMagReader.StopSwipeCard ();
 			}
 
-			// Match the data we want.
-			string pattern = "%B(\\d+)\\^([^\\^]+)\\^(\\d{4})";
-			Log.Debug("UniMag", pattern);
-			Java.Util.Regex.Pattern patternObject = Java.Util.Regex.Pattern.Compile (pattern);
-			Matcher matcher = patternObject.Matcher(swipeData);
-			string card = "";
-			string name = "";
-			string exp = "";
-			string cardData = "";
-			if(matcher.Find()) {
-				for(int a = 0; a < matcher.GroupCount(); ++a) {
-					Log.Debug("UniMag", a + " - "+matcher.Group(a));
-				}
-
-				card = matcher.Group(1);
-				name = matcher.Group(2);
-				exp = matcher.Group (3);
-
-				cardData = "Data: " + name + " -- " + card + " -- " + exp;
-				Log.Debug("UniMag", cardData);
-				OnCreditCardSwiped (cardData);
-			}
-
+			OnCreditCardSwiped ();
 		}
 
 		public void OnReceiveMsgProcessingCardData (){

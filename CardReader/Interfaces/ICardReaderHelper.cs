@@ -10,7 +10,7 @@ namespace CardReader.Interfaces
 
 		CardDetails CreditCardDetails { get; }
 
-		void StartListening(Action<string> OnCreditCardSwiped);
+		void StartListening(Action OnCreditCardSwiped);
 
 		void StopListening();
     }

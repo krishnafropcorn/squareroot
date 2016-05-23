@@ -24,17 +24,13 @@ namespace SquareRoot
         {
             PaymentChargeView.IsVisible = false;
             base.OnAppearing ();
-            _cardReaderHelper.StartListening ((string cardDetails) => {
+            _cardReaderHelper.StartListening (() => {
                 Device.BeginInvokeOnMainThread (async () => {
-                    if (_cardReaderHelper.CreditCardDetails == null)
-                        await DisplayAlert ("Invalid Swipe", "Please swipe again", "OK`");
-                    else
-                    {
-                        await DisplayAlert ("Valid Swipe", "Please share the content of this alert box with kartikbb@gmail.com: Card Details: " + cardDetails, "OK`");
+                    if (_cardReaderHelper.CreditCardDetails != null)
                         ShowPaymentScreen();
-                    }
                 });
             });
+
 			ShowReaderAvailableUi();
         }
 
