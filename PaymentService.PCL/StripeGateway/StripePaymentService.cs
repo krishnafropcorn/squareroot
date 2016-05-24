@@ -10,14 +10,14 @@ namespace Payment
     {
         bool _initialize;
 
-        public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int charge)
+        public Task<ChargeCardResponse> ChargeCard(CardDetails cardDeatils, int chargeInDollar)
         {
             Initialize();
 
             var myCharge = new StripeChargeCreateOptions();
 
             // always set these properties
-            myCharge.Amount = charge;
+            myCharge.Amount = chargeInDollar * 100;
             myCharge.Currency = "usd";
 
             // set this if you want to

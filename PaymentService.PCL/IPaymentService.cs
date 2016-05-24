@@ -6,7 +6,7 @@ namespace Payment
 {
     public interface IPaymentService
     {
-		Task<ChargeCardResponse> ChargeCard (CardDetails cardDeatils, int charge);
+		Task<ChargeCardResponse> ChargeCard (CardDetails cardDeatils, int chargeInDollar);
 
 		Task<CardToken> TokenizeCard (CardDetails cardDeatils);
 
