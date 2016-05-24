@@ -40,6 +40,6 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.fropcorn.test</string>
+	<string>com.squareroot.www</string>
 </dict>
 </plist>

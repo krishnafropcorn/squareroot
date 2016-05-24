@@ -54,8 +54,11 @@ namespace SquareRoot.iOS.Reader
         void uniMag_activate()
         {
             UmRet currentStatus = reader.StartUniMag(true);
-            if (currentStatus == UmRet.Success)
+			if (currentStatus == UmRet.Success || 
+				currentStatus == UmRet.AlreadyConnected || 
+				currentStatus == UmRet.SdkBusy)
             {
+				IsReaderPlugged = true;
                 uniMag_registerObservers(true);
                 DisplayDeviceStatus(currentStatus);
             }
@@ -76,7 +79,7 @@ namespace SquareRoot.iOS.Reader
             {
                 var data = notification.Object;
 
-				CardDetails objCardDetails = new CardDetails(data.ToString());
+				this.CreditCardDetails = new CardDetails(data.ToString());
 
                 onCreditCardSwiped();
             }
@@ -225,7 +228,7 @@ namespace SquareRoot.iOS.Reader
             {
                 case UmRet.Success: 
                 case UmRet.AlreadyConnected:
-                    IsReaderPlugged = true;
+//                    IsReaderPlugged = true;
                     // UniMagAlert.ShowAlert("Info", "Reader is connected.");
                     break;
                     //handle other cases
