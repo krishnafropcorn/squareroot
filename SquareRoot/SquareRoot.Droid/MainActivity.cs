@@ -8,6 +8,8 @@ using Android.Widget;
 using Android.OS;
 using Android.Content;
 using HockeyApp;
+using Android.Content.Res;
+using System.IO;
 
 namespace SquareRoot.Droid
 {
@@ -25,6 +27,18 @@ namespace SquareRoot.Droid
 			_applicationContent = Application.ApplicationContext;
 
             UnityConfig.Initialize();
+
+			AssetManager assets = this.Assets;
+			string content;
+			using (StreamReader sr = new StreamReader (assets.Open ("idt_unimagcfg_default.xml")))
+			{
+				content = sr.ReadToEnd ();
+			}
+
+			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			var filePath = Path.Combine (documentsPath, "idt_unimagcfg_default.xml");
+			System.IO.File.WriteAllText (filePath, content);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
         }

@@ -8,6 +8,7 @@ using Java.Util.Regex;
 using Android.OS;
 using System;
 using Common;
+using System.IO;
 
 
 namespace SquareRoot.Droid
@@ -18,7 +19,7 @@ namespace SquareRoot.Droid
 
 		public IntPtr Handle{ get; set;}
 
-		UniMagReader UniMagReader;
+		UniMagReader _uniMagReader;
 
 		public CardDetails CreditCardDetails { get; private set; }
 
@@ -28,24 +29,28 @@ namespace SquareRoot.Droid
 		{
 			IsReaderPlugged = false;
 			CreditCardDetails = null;
-			UniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
-			UniMagReader.SetSaveLogEnable(false);
-			UniMagReader.SetXMLFileNameWithPath(null);
-			//UniMagReader.LoadingConfigurationXMLFile(true);
+			_uniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
+			_uniMagReader.SetSaveLogEnable(false);
+
+			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			var filePath = Path.Combine (documentsPath, "idt_unimagcfg_default.xml");
+
+			_uniMagReader.SetXMLFileNameWithPath(filePath);
+
 			this.OnCreditCardSwiped = OnCreditCardSwiped;
-			//myUniMagReader.setVerboseLoggingEnable(true);
-			UniMagReader.RegisterListen();
-			// ToDo: Attach to listeners
+
+			_uniMagReader.SetVerboseLoggingEnable(true);
+
+			_uniMagReader.RegisterListen();
 		}
 
 		public void StopListening()
 		{
 			IsReaderPlugged = false;
 			CreditCardDetails = null;
-			UniMagReader.StopSwipeCard();
-			UniMagReader.UnregisterListen();
-			UniMagReader.Release();
-			// ToDo: Detach from listeners
+			_uniMagReader.StopSwipeCard();
+			_uniMagReader.UnregisterListen();
+			_uniMagReader.Release();
 		}
 
 		public void OnReceiveMsgAutoConfigProgress (int p0, double p1, string p2)
@@ -73,8 +78,8 @@ namespace SquareRoot.Droid
 
 			CreditCardDetails = new CardDetails (swipeData);
 			Log.Debug ("UniMag", "SWIPE - " + swipeData);
-			if (UniMagReader.IsSwipeCardRunning) {
-				UniMagReader.StopSwipeCard ();
+			if (_uniMagReader.IsSwipeCardRunning) {
+				_uniMagReader.StopSwipeCard ();
 			}
 
 			OnCreditCardSwiped ();
@@ -98,11 +103,11 @@ namespace SquareRoot.Droid
 
 		public void OnReceiveMsgDisconnected() {
 			Log.Debug("UniMag", "OnReceiveMsgDisconnected");
-			if(UniMagReader.IsSwipeCardRunning) {
-				UniMagReader.StopSwipeCard();
+			if(_uniMagReader.IsSwipeCardRunning) {
+				_uniMagReader.StopSwipeCard();
 			}
 
-			UniMagReader.Release();
+			_uniMagReader.Release();
 		}
 
 		public void OnReceiveMsgFailureInfo(int arg0, string arg1) {

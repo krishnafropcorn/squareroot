@@ -159,4 +159,7 @@
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\idt_unimagcfg_default.xml" />
+  </ItemGroup>
 </Project>
