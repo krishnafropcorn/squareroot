@@ -41,8 +41,11 @@ namespace SquareRoot.Droid
 
 			_uniMagReader.SetVerboseLoggingEnable(true);
 
-			_uniMagReader.RegisterListen();
+            _uniMagReader.RegisterListen();
+
+            _uniMagReader.SetTimeoutOfSwipeCard(0);
 		}
+       
 
 		public void StopListening()
 		{
