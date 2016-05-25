@@ -1,24 +1,18 @@
 ﻿using CardReader.Interfaces;
-using Payment;
-using Xamarin.Forms;
-using SquareRoot.iOS.Reader;
 using System;
 using UniMag.Sdk.Bindings.iOS;
 using Foundation;
-using UIKit;
-using CoreGraphics;
-using CardReader;
 using Common;
 
 namespace SquareRoot.iOS.Reader
 {
     public class UnimagCardReaderHelper : ICardReaderHelper
     {
-        uniMag reader;
+        private uniMag _reader;
+        private bool _areCallbacksRegistered;
+        private Action _onCreditCardSwiped;
 
         public bool IsReaderPlugged { get; private set; }
-
-        private Action onCreditCardSwiped;
 
         public CardDetails CreditCardDetails { get; private set; }
 
@@ -26,42 +20,27 @@ namespace SquareRoot.iOS.Reader
         {
             IsReaderPlugged = false;
             CreditCardDetails = null;
-
-            // ToDo: Detach from listeners
         }
 
         public void StartListening(Action onCreditCardSwiped)
         {
-            this.onCreditCardSwiped = onCreditCardSwiped;
+            this._onCreditCardSwiped = onCreditCardSwiped;
             uniMag.EnableLogging(true);
-            reader = new uniMag();
-            reader.Init();
-            reader.SetAutoConnect(true);
-            reader.SetSwipeTimeoutDuration(0);
-            reader.SetAutoAdjustVolume(true);
+            _reader = new uniMag();
+            _reader.Init();
+            _reader.SetAutoConnect(true);
+            _reader.SetSwipeTimeoutDuration(0);
+            _reader.SetAutoAdjustVolume(true);
 
             var center = NSNotificationCenter.DefaultCenter;
             center.AddObserver(new NSString("uniMagAttachmentNotification"), umDevice_attachment);
-            // uniMag_activate();
         }
 
         //called when uniMag is physically attached
         private void umDevice_attachment(NSNotification notification)
         {
-            uniMag_activate();
-        }
-
-        void uniMag_activate()
-        {
-            UmRet currentStatus = reader.StartUniMag(true);
-			if (currentStatus == UmRet.Success || 
-				currentStatus == UmRet.AlreadyConnected || 
-				currentStatus == UmRet.SdkBusy)
-            {
-				IsReaderPlugged = true;
-                uniMag_registerObservers(true);
-                DisplayDeviceStatus(currentStatus);
-            }
+            RegisterCallbacks();
+            UmRet currentStatus = _reader.StartUniMag(true);
         }
 
         //called when the SDK has read something from the uniMag device
@@ -69,7 +48,6 @@ namespace SquareRoot.iOS.Reader
         // Use this to provide an early feedback on the UI
         private void umDataProcessing(NSNotification notification)
         {
-
         }
 
         //called when SDK received a swipe successfully
@@ -77,15 +55,13 @@ namespace SquareRoot.iOS.Reader
         {
             try
             {
-                var data = notification.Object;
-
-				this.CreditCardDetails = new CardDetails(data.ToString());
-
-                onCreditCardSwiped();
+                NSObject data = notification.Object;
+                CreditCardDetails = new CardDetails(data.ToString());
+                _onCreditCardSwiped();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                UniMagAlert.ShowAlert("Error while parsing data", ex.Message);
             }
         }
 
@@ -93,32 +69,29 @@ namespace SquareRoot.iOS.Reader
         // "swipe timeout interval".
         private void umSwipe_timeout(NSNotification notification)
         {
+            UniMagAlert.ShowAlert("Tired of waiting", "We did not receive a swipe in time. Ideally, we should receive this message since we have set timeout to infinite");
         }
 
-        void uniMag_deactivate()
+        private void uniMag_deactivate()
         {
             UmRet currentStatus = UmRet.NotConnected;
-            if (reader != null && reader.ConnectionStatus)
-            {
-                currentStatus = reader.StartUniMag(false);
-            }
-            uniMag_registerObservers(false);
-            DisplayDeviceStatus(currentStatus);
+            if (_reader != null && _reader.ConnectionStatus)
+                currentStatus = _reader.StartUniMag(false);
+            if (currentStatus == UmRet.NotConnected)
+                StopListening();
         }
 
         //called when SDK failed to handshake with reader in time. ie, the connection task has timed out
         private void umConnection_timeout(NSNotification notification)
         {
-            //connect again
-            UmRet swipeStatus = this.reader.RequestSwipe;
-            DisplayDeviceStatus(swipeStatus);
+            StopListening();
+            UniMagAlert.ShowAlert("Error", "We could not connect to reader in time. Please reinsert");
         }
 
         ////called when the connection task is successful. SDK's connection state changes to true
         private void umConnection_connected(NSNotification notification)
         {
-            UmRet swipeStatus = this.reader.RequestSwipe;
-            DisplayDeviceStatus(swipeStatus);
+            IsReaderPlugged = true;
         }
 
         // wait for a swipe to be made
@@ -129,13 +102,14 @@ namespace SquareRoot.iOS.Reader
         //called when umSwipe_invalid
         private void umSwipe_invalid(NSNotification notification)
         {
-            //swipe again alert
-            DisplaySwipeStatus(this.reader.RequestSwipe);
+            UniMagAlert.ShowAlert("Error", "Invaild swipe, please try again.");
         }
 
         //called when attempting to start the connection task but iDevice's headphone playback volume is too low
         private void umConnection_lowVolume(NSNotification notification)
         {
+            StopListening();
+            UniMagAlert.ShowAlert("Volume too low", "Increase volume of your device and reinsert the reader.");
         }
 
         //called when umSystemMessage
@@ -146,16 +120,13 @@ namespace SquareRoot.iOS.Reader
         //called when umConnection_disconnected
         private void umConnection_disconnected(NSNotification notification)
         {
-            //update status
-            UmRet swipeStatus = this.reader.RequestSwipe;
-            DisplayDeviceStatus(swipeStatus);
+            StopListening();
         }
 
         //called whenumDevice_detachment
         private void umDevice_detachment(NSNotification notification)
         {
-//            UmRet swipeStatus = this.reader.RequestSwipe;
-//            displayDeviceStatus(swipeStatus);
+            StopListening();
         }
 
         //called when successfully starting the connection task
@@ -173,6 +144,8 @@ namespace SquareRoot.iOS.Reader
         // "command timeout interval"
         private void umCommand_timeout(NSNotification notification)
         {
+            StopListening();
+            UniMagAlert.ShowAlert("Error", "We could not connect to reader in time. Please reinsert");
         }
 
         //called when SDK successfully received a response to a command
@@ -180,82 +153,48 @@ namespace SquareRoot.iOS.Reader
         {
         }
 
-        private void uniMag_registerObservers(bool registerObservers)
+        private void RegisterCallbacks()
         {
-            if (registerObservers)
-            {
-                var center = NSNotificationCenter.DefaultCenter;
-                //center.AddObserver(new NSString("uniMagAttachmentNotification"), umDevice_attachment);
-                center.AddObserver(new NSString("uniMagDetachmentNotification"), umDevice_detachment);
-                center.AddObserver(new NSString("uniMagInsufficientPowerNotification"), umConnection_lowVolume);
-                center.AddObserver(new NSString("uniMagTimeoutNotification"), umConnection_timeout);
-                center.AddObserver(new NSString("uniMagDidConnectNotification"), umConnection_connected);
-                center.AddObserver(new NSString("uniMagDidDisconnectNotification"), umConnection_disconnected);
-                center.AddObserver(new NSString("uniMagSwipeNotification"), umSwipe_starting);
-                center.AddObserver(new NSString("uniMagTimeoutSwipeNotification"), umSwipe_timeout);
-                center.AddObserver(new NSString("uniMagDataProcessingNotification"), umDataProcessing);
-                center.AddObserver(new NSString("uniMagInvalidSwipeNotification"), umSwipe_invalid);
-                center.AddObserver(new NSString("uniMagDidReceiveDataNotification"), umSwipe_receivedSwipe);
-                center.AddObserver(new NSString("uniMagCmdSendingNotification"), umCommand_starting);
-                center.AddObserver(new NSString("uniMagCommandTimeoutNotification"), umCommand_timeout);
-                center.AddObserver(new NSString("uniMagDidReceiveCmdNotification"), umCommand_receivedResponse);
-                center.AddObserver(new NSString("uniMagSystemMessageNotification"), umSystemMessage);
-            }
-            else
-            {
-                var center = NSNotificationCenter.DefaultCenter;
-                center.RemoveObserver(new NSString("uniMagAttachmentNotification"));
-                center.RemoveObserver(new NSString("uniMagDetachmentNotification"));
-                center.RemoveObserver(new NSString("uniMagInsufficientPowerNotification"));
-                center.RemoveObserver(new NSString("uniMagTimeoutNotification"));
-                center.RemoveObserver(new NSString("uniMagDidConnectNotification"));
-                center.RemoveObserver(new NSString("uniMagDidDisconnectNotification"));
-                center.RemoveObserver(new NSString("uniMagSwipeNotification"));
-                center.RemoveObserver(new NSString("uniMagTimeoutSwipeNotification"));
-                center.RemoveObserver(new NSString("uniMagDataProcessingNotification"));
-                center.RemoveObserver(new NSString("uniMagInvalidSwipeNotification"));
-                center.RemoveObserver(new NSString("uniMagDidReceiveDataNotification"));
-                center.RemoveObserver(new NSString("uniMagCmdSendingNotification"));
-                center.RemoveObserver(new NSString("uniMagCommandTimeoutNotification"));
-                center.RemoveObserver(new NSString("uniMagDidReceiveCmdNotification"));
-                center.RemoveObserver(new NSString("uniMagSystemMessageNotification"));
-            }
+            if (_areCallbacksRegistered)
+                return;
+            _areCallbacksRegistered = true;
+
+            var center = NSNotificationCenter.DefaultCenter;
+            //center.AddObserver(new NSString("uniMagAttachmentNotification"), umDevice_attachment);
+            center.AddObserver(new NSString("uniMagDetachmentNotification"), umDevice_detachment);
+            center.AddObserver(new NSString("uniMagInsufficientPowerNotification"), umConnection_lowVolume);
+            center.AddObserver(new NSString("uniMagTimeoutNotification"), umConnection_timeout);
+            center.AddObserver(new NSString("uniMagDidConnectNotification"), umConnection_connected);
+            center.AddObserver(new NSString("uniMagDidDisconnectNotification"), umConnection_disconnected);
+            center.AddObserver(new NSString("uniMagSwipeNotification"), umSwipe_starting);
+            center.AddObserver(new NSString("uniMagTimeoutSwipeNotification"), umSwipe_timeout);
+            center.AddObserver(new NSString("uniMagDataProcessingNotification"), umDataProcessing);
+            center.AddObserver(new NSString("uniMagInvalidSwipeNotification"), umSwipe_invalid);
+            center.AddObserver(new NSString("uniMagDidReceiveDataNotification"), umSwipe_receivedSwipe);
+            center.AddObserver(new NSString("uniMagCmdSendingNotification"), umCommand_starting);
+            center.AddObserver(new NSString("uniMagCommandTimeoutNotification"), umCommand_timeout);
+            center.AddObserver(new NSString("uniMagDidReceiveCmdNotification"), umCommand_receivedResponse);
+            center.AddObserver(new NSString("uniMagSystemMessageNotification"), umSystemMessage);
         }
 
-        private void DisplayDeviceStatus(UmRet swipeStatus)
+        private void UnregisterCallbacks()
         {
-            switch (swipeStatus)
-            {
-                case UmRet.Success: 
-                case UmRet.AlreadyConnected:
-//                    IsReaderPlugged = true;
-                    // UniMagAlert.ShowAlert("Info", "Reader is connected.");
-                    break;
-                    //handle other cases
-                default : 
-                    StopListening();
-                    // UniMagAlert.ShowAlert("Info", "Reader not connected, please try reinserting the reader firmly.");
-                    break;
-            }
-        }
-
-        private void DisplaySwipeStatus(UmRet swipeStatus)
-        {
-            switch (swipeStatus)
-            {
-                case UmRet.Success: 
-                    break;
-                    //handle other cases
-                default : 
-                    CreditCardDetails = null;
-                    UniMagAlert.ShowAlert("Info", "Invaild swipe, please try again.");
-                    break;
-            }
-        }
-
-        void determineNextStep()
-        {
-            // this is where we shuttle the data
+            var center = NSNotificationCenter.DefaultCenter;
+            center.RemoveObserver(new NSString("uniMagAttachmentNotification"));
+            center.RemoveObserver(new NSString("uniMagDetachmentNotification"));
+            center.RemoveObserver(new NSString("uniMagInsufficientPowerNotification"));
+            center.RemoveObserver(new NSString("uniMagTimeoutNotification"));
+            center.RemoveObserver(new NSString("uniMagDidConnectNotification"));
+            center.RemoveObserver(new NSString("uniMagDidDisconnectNotification"));
+            center.RemoveObserver(new NSString("uniMagSwipeNotification"));
+            center.RemoveObserver(new NSString("uniMagTimeoutSwipeNotification"));
+            center.RemoveObserver(new NSString("uniMagDataProcessingNotification"));
+            center.RemoveObserver(new NSString("uniMagInvalidSwipeNotification"));
+            center.RemoveObserver(new NSString("uniMagDidReceiveDataNotification"));
+            center.RemoveObserver(new NSString("uniMagCmdSendingNotification"));
+            center.RemoveObserver(new NSString("uniMagCommandTimeoutNotification"));
+            center.RemoveObserver(new NSString("uniMagDidReceiveCmdNotification"));
+            center.RemoveObserver(new NSString("uniMagSystemMessageNotification"));
         }
     }
 }
