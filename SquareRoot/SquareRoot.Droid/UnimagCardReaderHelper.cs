@@ -27,9 +27,14 @@ namespace SquareRoot.Droid
 
 		public void StartListening(Action OnCreditCardSwiped)
 		{
-			IsReaderPlugged = false;
-			CreditCardDetails = null;
-			_uniMagReader = new UniMagReader (this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
+            this.OnCreditCardSwiped = OnCreditCardSwiped;
+
+            _uniMagReader = new UniMagReader(this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
+
+            _uniMagReader.RegisterListen();
+
+            _uniMagReader.SetTimeoutOfSwipeCard(0);
+
 			_uniMagReader.SetSaveLogEnable(false);
 
 			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
@@ -37,15 +42,11 @@ namespace SquareRoot.Droid
 
 			_uniMagReader.SetXMLFileNameWithPath(filePath);
 
-			this.OnCreditCardSwiped = OnCreditCardSwiped;
-
 			_uniMagReader.SetVerboseLoggingEnable(true);
 
-            _uniMagReader.RegisterListen();
+            _uniMagReader.LoadingConfigurationXMLFile(true);
 
-            _uniMagReader.SetTimeoutOfSwipeCard(0);
 		}
-       
 
 		public void StopListening()
 		{
