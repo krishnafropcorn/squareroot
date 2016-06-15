@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common
 {
@@ -14,12 +16,7 @@ namespace Common
 			set;
 		}
 
-		public string CardFirstName {
-			get;
-			set;
-		}
-
-		public string CardLastName {
+		public string CardFullName {
 			get;
 			set;
 		}
@@ -44,26 +41,23 @@ namespace Common
 			set;
 		}
 
-		public CardDetails (string data)
+		public CardDetails (string data, bool isAndroid = false)
 		{
-			string tempData = data.ToString ();
-			string[] dataSubstrings = tempData.Split ('^');
-			if (dataSubstrings.Length > 2) {
-				string[] nameValues = dataSubstrings [1].Split ('/');
-				if (nameValues.Length >= 2) {
-					CardLastName = nameValues [0].Trim ();
-					CardFirstName = nameValues [1].Trim ();
+			string[] dataSubstrings = data.Split ('^');
+			if (dataSubstrings.Length >= 3) {
+				CreditCardNumber = dataSubstrings[0].Substring(isAndroid ? 2 : 1);
+
+				if (isAndroid)
+				{
+					CardFullName = dataSubstrings[1].Substring(0, dataSubstrings[1].Length - 2);
+				}
+				else {
+					string[] nameValues = dataSubstrings[1].Split('/');
+					CardFullName = nameValues[1].Trim() + nameValues[0].Trim();
 				}
 
-				string[] cardDetails = dataSubstrings [2].Split (';');
-				if (cardDetails.Length >= 2) {
-					string[] cardNumbers = cardDetails [1].Split ('=');
-					if (cardNumbers.Length >= 1)
-						CreditCardNumber = cardNumbers [0].Trim ();
-
-					CardExpiryYear = Convert.ToInt32 (cardDetails [0].Substring (0, 2));
-					CardExpiryMonth = Convert.ToInt32 (cardDetails [0].Substring (2, 2));
-				}
+				CardExpiryYear = Convert.ToInt32(dataSubstrings[2].Substring(0, 2));
+				CardExpiryMonth = Convert.ToInt32(dataSubstrings[2].Substring(2, 2));
 			}
 		}
 	}

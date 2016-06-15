@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 using CardReader.Interfaces;
-using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
 using Payment;
-using Common;
 
 namespace SquareRoot
 {
-    public partial class SwipeCard : ContentPage
+	public partial class SwipeCard : ContentPage
     {
         private ICardReaderHelper _cardReaderHelper;
 
@@ -20,25 +17,37 @@ namespace SquareRoot
             _cardReaderHelper = UnityProvider.Container.Resolve<ICardReaderHelper>();
         }
 
-        protected override void OnAppearing()
-        {
-            PaymentChargeView.IsVisible = false;
-            base.OnAppearing ();
-            _cardReaderHelper.StartListening (() => {
-                Device.BeginInvokeOnMainThread (async () => {
-                    if (_cardReaderHelper.CreditCardDetails != null)
-                        ShowPaymentScreen();
-                });
-            });
+		protected override void OnAppearing()
+		{
+			PaymentChargeView.IsVisible = false;
+			base.OnAppearing();
+			_cardReaderHelper.StartListening(() =>
+			{
+				Device.BeginInvokeOnMainThread(() =>
+				{
+					if (BtnRetry.IsVisible)
+					{
+						if (_cardReaderHelper.IsReaderPlugged)
+							ShowSwipeCardUi();
+					}
+					else {
+						if (_cardReaderHelper.CreditCardDetails != null)
+							ShowPaymentScreen();
+					}
+				});
+			});
 
-			ShowReaderAvailableUi();
-        }
+			if (!_cardReaderHelper.IsReaderPlugged) 
+				ShowReaderAvailableUi(); 
+			else 
+				ShowSwipeCardUi();
+		}
 
-        public async void OnChargeClicked(object sender,EventArgs args)
+		public async void OnChargeClicked(object sender,EventArgs args)
         {
             if (BtnCharge.Text == "Charge")
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                     {
                         BtnCharge.Text = "Charging...";
                     });
@@ -65,37 +74,34 @@ namespace SquareRoot
             }
         }
 
-		public async void OnRetryClicked(object sender,EventArgs args) {
+		public void OnRetryClicked(object sender,EventArgs args) {
 			if (_cardReaderHelper.IsReaderPlugged) {
 				Device.BeginInvokeOnMainThread (() => ShowSwipeCardUi ());
 			}				
 		}
 
-        private async Task ShowReaderAvailableUi ()
+        private void ShowReaderAvailableUi ()
         {
             UserInstructionLabel.IsVisible = true;
-            PaymentChargeView.IsVisible = false;
-            
-			if (!_cardReaderHelper.IsReaderPlugged) {
-				UserInstructionLabel.Text = "Please connect the reader";
-                BtnRetry.IsVisible = true;
-			}
-			else
-            	ShowSwipeCardUi ();
+			UserInstructionLabel.Text = "Please connect the reader";
+			BtnRetry.IsVisible = true;
+			PaymentChargeView.IsVisible = false;
         }
 
         private void ShowSwipeCardUi ()
         {
-            UserInstructionLabel.Text = "Swipe Card Now";
+            UserInstructionLabel.IsVisible = true;
+			UserInstructionLabel.Text = "Swipe Card Now";
             BtnRetry.IsVisible = false;
             PaymentChargeView.IsVisible = false;
         }
 
-		private async void ShowPaymentScreen ()
+		private void ShowPaymentScreen ()
         {
-            PaymentChargeView.IsVisible = true;
-            BtnRetry.IsVisible = false;
-            UserInstructionLabel.IsVisible = false;
+			UserInstructionLabel.IsVisible = false;
+			UserInstructionLabel.Text = "";
+			BtnRetry.IsVisible = false;
+			PaymentChargeView.IsVisible = true;
         }
     }
 }

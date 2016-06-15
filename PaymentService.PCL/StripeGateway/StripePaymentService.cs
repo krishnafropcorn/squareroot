@@ -29,7 +29,7 @@ namespace Payment
                 ExpirationMonth = cardDeatils.CardExpiryMonth.ToString(),
                 ExpirationYear = cardDeatils.CardExpiryYear.ToString(),
                 Cvc = cardDeatils.CVV,
-				Name = cardDeatils.CardFirstName + " " + cardDeatils.CardLastName
+				Name = cardDeatils.CardFullName
             };
 
             TaskCompletionSource<ChargeCardResponse> taskCompletionSource = new TaskCompletionSource<ChargeCardResponse>();

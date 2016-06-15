@@ -1,51 +1,44 @@
-using CardReader.Interfaces;
-using Payment;
 using IDTech.MSR.UniMag;
 using Android.Util;
 using IDTech.MSR.XMLManager;
-using Java.Lang;
-using Java.Util.Regex;
-using Android.OS;
 using System;
 using Common;
 using System.IO;
-
+using Android.App;
+using CardReader.Interfaces;
+using IDTech.MSR.UniMag.UniMagTools;
 
 namespace SquareRoot.Droid
 {
-	class UnimagCardReaderHelper : ICardReaderHelper,IUniMagReaderMsg
+	public class UnimagCardReaderHelper : Java.Lang.Object, IUniMagReaderMsg, ICardReaderHelper, IUniMagReaderToolsMsg
 	{
 		public bool IsReaderPlugged { get; private set; }
-
-		public IntPtr Handle{ get; set;}
 
 		UniMagReader _uniMagReader;
 
 		public CardDetails CreditCardDetails { get; private set; }
 
-		Action OnCreditCardSwiped;
+		private Action _onReaderStateChanged;
 
-		public void StartListening(Action OnCreditCardSwiped)
+		public void StartListening(Action OnReaderStateChanged)
 		{
-            this.OnCreditCardSwiped = OnCreditCardSwiped;
+            this._onReaderStateChanged = OnReaderStateChanged;
 
-            _uniMagReader = new UniMagReader(this, MainActivity.GetApplicationContext(), UniMagReader.ReaderType.UmOrPro);
+			_uniMagReader = new UniMagReader(this, Application.Context.ApplicationContext);
 
-            _uniMagReader.RegisterListen();
+			_uniMagReader.SetVerboseLoggingEnable(true); 
 
-            _uniMagReader.SetTimeoutOfSwipeCard(0);
+			_uniMagReader.RegisterListen();
 
-			_uniMagReader.SetSaveLogEnable(false);
-
-			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			var documentsPath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 			var filePath = Path.Combine (documentsPath, "idt_unimagcfg_default.xml");
 
 			_uniMagReader.SetXMLFileNameWithPath(filePath);
+			_uniMagReader.LoadingConfigurationXMLFile(true);
 
-			_uniMagReader.SetVerboseLoggingEnable(true);
-
-            _uniMagReader.LoadingConfigurationXMLFile(true);
-
+			var firmwareUpdateTool = new UniMagSDKTools(this, Application.Context.ApplicationContext);
+			firmwareUpdateTool.SetUniMagReader(_uniMagReader);
+			_uniMagReader.SetSDKToolProxy(firmwareUpdateTool.SDKToolProxy);
 		}
 
 		public void StopListening()
@@ -80,13 +73,13 @@ namespace SquareRoot.Droid
 			var rawSwipeData = new Java.Lang.String (rawData);
 			string swipeData = rawSwipeData.ToString ();
 
-			CreditCardDetails = new CardDetails (swipeData);
+			CreditCardDetails = new CardDetails (swipeData, true);
 			Log.Debug ("UniMag", "SWIPE - " + swipeData);
 			if (_uniMagReader.IsSwipeCardRunning) {
 				_uniMagReader.StopSwipeCard ();
 			}
 
-			OnCreditCardSwiped ();
+			_onReaderStateChanged ();
 		}
 
 		public void OnReceiveMsgProcessingCardData (){
@@ -103,6 +96,9 @@ namespace SquareRoot.Droid
 		public void OnReceiveMsgConnected() {
 			Log.Debug("UniMag", "OnReceiveMsgConnected");
 			Log.Debug("UniMag", "Card reader is connected.");
+			_uniMagReader.SetTimeoutOfSwipeCard(0);
+			IsReaderPlugged = _uniMagReader.StartSwipeCard();
+			_onReaderStateChanged();
 		}
 
 		public void OnReceiveMsgDisconnected() {
@@ -128,7 +124,7 @@ namespace SquareRoot.Droid
 		}
 
 		public void OnReceiveMsgToConnect() {
-			Log.Debug("UniMag","Swiper Powered Up");
+			Log.Debug("UniMag","Reader powering up...");
 		}
 
 		public void OnReceiveMsgToSwipeCard() {
@@ -139,7 +135,16 @@ namespace SquareRoot.Droid
 			Log.Debug("UniMag", "OnReceiveMsgAutoConfigCompleted");
 		}
 
-		public void Dispose()
-		{}
+		public void OnReceiveMsgChallengeResult(int p0, byte[] p1)
+		{
+		}
+
+		public void OnReceiveMsgUpdateFirmwareProgress(int p0)
+		{
+		}
+
+		public void OnReceiveMsgUpdateFirmwareResult(int p0)
+		{
+		}
 	}
 }

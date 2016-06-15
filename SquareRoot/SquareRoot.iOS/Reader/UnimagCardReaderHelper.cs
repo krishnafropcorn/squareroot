@@ -18,7 +18,7 @@ namespace SquareRoot.iOS.Reader
 
         public bool IsReaderPlugged { get; private set; }
 
-        private Action onCreditCardSwiped;
+        private Action _onReaderStateChanged;
 
         public CardDetails CreditCardDetails { get; private set; }
 
@@ -30,9 +30,9 @@ namespace SquareRoot.iOS.Reader
             // ToDo: Detach from listeners
         }
 
-        public void StartListening(Action onCreditCardSwiped)
+        public void StartListening(Action OnReaderStateChanged)
         {
-            this.onCreditCardSwiped = onCreditCardSwiped;
+            this._onReaderStateChanged = OnReaderStateChanged;
             uniMag.EnableLogging(true);
             reader = new uniMag();
             reader.Init();
@@ -61,6 +61,7 @@ namespace SquareRoot.iOS.Reader
 				IsReaderPlugged = true;
                 uniMag_registerObservers(true);
                 DisplayDeviceStatus(currentStatus);
+				OnCreditCardSwiped ();
             }
         }
 
@@ -81,7 +82,7 @@ namespace SquareRoot.iOS.Reader
 
 				this.CreditCardDetails = new CardDetails(data.ToString());
 
-                onCreditCardSwiped();
+                _onReaderStateChanged();
             }
             catch (Exception ex)
             {

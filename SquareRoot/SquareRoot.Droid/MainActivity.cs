@@ -1,19 +1,14 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 using Android.Content;
-using HockeyApp;
 using Android.Content.Res;
 using System.IO;
+using IDTech.MSR.UniMag;
 
 namespace SquareRoot.Droid
 {
-    [Activity(Label = "SquareRoot", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity(Label = "SquareRoot", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
 		private static Context _applicationContent;
@@ -21,8 +16,6 @@ namespace SquareRoot.Droid
 		protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-			CrashManager.Register(this, "46cd80cc0e5d4a3fb523fd0fa5d64bd6");
 
 			_applicationContent = Application.ApplicationContext;
 
@@ -38,6 +31,20 @@ namespace SquareRoot.Droid
 			var documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			var filePath = Path.Combine (documentsPath, "idt_unimagcfg_default.xml");
 			System.IO.File.WriteAllText (filePath, content);
+
+			//var _uniMagReader = new UniMagReader(new UnimagCardReaderHelper(), Application.ApplicationContext, UniMagReader.ReaderType.UmOrPro);
+
+			//_uniMagReader.RegisterListen();
+
+			//_uniMagReader.SetTimeoutOfSwipeCard(0);
+
+			//_uniMagReader.SetSaveLogEnable(false);
+
+			//_uniMagReader.SetXMLFileNameWithPath(filePath);
+
+			//_uniMagReader.SetVerboseLoggingEnable(true);
+
+			//_uniMagReader.LoadingConfigurationXMLFile(false);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
