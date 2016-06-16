@@ -42,7 +42,6 @@ namespace SquareRoot.iOS.Reader
 
             var center = NSNotificationCenter.DefaultCenter;
             center.AddObserver(new NSString("uniMagAttachmentNotification"), umDevice_attachment);
-            // uniMag_activate();
         }
 
         //called when uniMag is physically attached
@@ -61,7 +60,8 @@ namespace SquareRoot.iOS.Reader
 				IsReaderPlugged = true;
                 uniMag_registerObservers(true);
                 DisplayDeviceStatus(currentStatus);
-				OnCreditCardSwiped ();
+                _onReaderStateChanged ();
+				//OnCreditCardSwiped ();
             }
         }
 
@@ -70,7 +70,6 @@ namespace SquareRoot.iOS.Reader
         // Use this to provide an early feedback on the UI
         private void umDataProcessing(NSNotification notification)
         {
-
         }
 
         //called when SDK received a swipe successfully
@@ -118,6 +117,8 @@ namespace SquareRoot.iOS.Reader
         ////called when the connection task is successful. SDK's connection state changes to true
         private void umConnection_connected(NSNotification notification)
         {
+            IsReaderPlugged = true;
+            _onReaderStateChanged ();
             UmRet swipeStatus = this.reader.RequestSwipe;
             DisplayDeviceStatus(swipeStatus);
         }

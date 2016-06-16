@@ -15,8 +15,6 @@
 	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>SquareRoot</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-60@2x</string>
@@ -40,6 +38,10 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.squareroot.www</string>
+	<string>com.fastbar.square</string>
+	<key>CFBundleName</key>
+	<string>SquareRoot</string>
+	<key>CFBundleVersion</key>
+	<string>104</string>
 </dict>
 </plist>

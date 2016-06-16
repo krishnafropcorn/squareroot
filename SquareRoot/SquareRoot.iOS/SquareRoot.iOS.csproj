@@ -25,8 +25,8 @@
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodesignKey>iPhone Developer: Krishna M (7U4USUJAQV)</CodesignKey>
-    <CodesignProvision>80e233d7-eff7-498e-80b1-b9f822728a25</CodesignProvision>
+    <CodesignKey>iPhone Developer: Kartik Bansal (Y48GJ9U8K3)</CodesignKey>
+    <CodesignProvision>f0d0bc18-7d76-400d-b3bb-14fa1e8699ea</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -38,6 +38,8 @@
     <MtouchArch>i386, x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodesignKey>iPhone Developer: Kartik Bansal (Y48GJ9U8K3)</CodesignKey>
+    <CodesignProvision>f0d0bc18-7d76-400d-b3bb-14fa1e8699ea</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,11 +51,11 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7</MtouchArch>
-    <CodesignKey>iPhone Developer: Krishna M (7U4USUJAQV)</CodesignKey>
+    <CodesignKey>iPhone Developer: Kartik Bansal (Y48GJ9U8K3)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodesignProvision>6557154c-6954-4ada-9557-f2c27977a22a</CodesignProvision>
+    <CodesignProvision>f0d0bc18-7d76-400d-b3bb-14fa1e8699ea</CodesignProvision>
     <MtouchExtraArgs>--linkskip=System.Runtime</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
@@ -64,9 +66,11 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Kartik Bansal (Y48GJ9U8K3)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BuildIpa>true</BuildIpa>
+    <CodesignProvision>19b4a453-7d74-49eb-9074-4438512bb5df</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>

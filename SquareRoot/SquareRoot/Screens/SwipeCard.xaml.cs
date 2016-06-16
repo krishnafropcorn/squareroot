@@ -21,7 +21,7 @@ namespace SquareRoot
 		{
 			PaymentChargeView.IsVisible = false;
 			base.OnAppearing();
-			_cardReaderHelper.StartListening(() =>
+            _cardReaderHelper.StartListening(() =>
 			{
 				Device.BeginInvokeOnMainThread(() =>
 				{
@@ -37,10 +37,10 @@ namespace SquareRoot
 				});
 			});
 
-			if (!_cardReaderHelper.IsReaderPlugged) 
-				ShowReaderAvailableUi(); 
-			else 
-				ShowSwipeCardUi();
+            if (!_cardReaderHelper.IsReaderPlugged)
+                ShowReaderAvailableUi ();
+            else 
+                ShowSwipeCardUi ();
 		}
 
 		public async void OnChargeClicked(object sender,EventArgs args)

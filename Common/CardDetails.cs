@@ -41,13 +41,13 @@ namespace Common
 			set;
 		}
 
-		public CardDetails (string data, bool isAndroid = false)
+		public CardDetails (string data)
 		{
 			string[] dataSubstrings = data.Split ('^');
 			if (dataSubstrings.Length >= 3) {
-				CreditCardNumber = dataSubstrings[0].Substring(isAndroid ? 2 : 1);
+                CreditCardNumber = dataSubstrings[0].Substring(2);
 
-				if (isAndroid)
+                if (!dataSubstrings[1].Contains("/"))
 				{
 					CardFullName = dataSubstrings[1].Substring(0, dataSubstrings[1].Length - 2);
 				}
@@ -55,6 +55,8 @@ namespace Common
 					string[] nameValues = dataSubstrings[1].Split('/');
 					CardFullName = nameValues[1].Trim() + nameValues[0].Trim();
 				}
+
+                CardFullName = CardFullName.Trim ();
 
 				CardExpiryYear = Convert.ToInt32(dataSubstrings[2].Substring(0, 2));
 				CardExpiryMonth = Convert.ToInt32(dataSubstrings[2].Substring(2, 2));
